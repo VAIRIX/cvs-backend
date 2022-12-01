@@ -1,0 +1,20 @@
+{
+  "version": "0.2",
+  "words": ["nestjs"],
+  "language": "en",
+  "ignorePaths": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/.git/**",
+    "**/.gitignore",
+    "**/.github",
+    "./coverage/**",
+    "./nest-cli.json",
+    "./package.json",
+    "./package-lock.json",
+    "./tsconfig.json",
+    "./eslint.js",
+    "./commitlint.config.js",
+    "./cspell.json"
+  ]
+}
