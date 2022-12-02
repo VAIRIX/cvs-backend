@@ -6,6 +6,20 @@ async function bootstrap() {
 
   const defaultPort = 3000;
   const port = process.env.PORT || defaultPort;
-  await app.listen(port);
+
+  const whitelist = process.env.CORS_DOMAINS?.startsWith('*')
+    ? process.env.CORS_DOMAINS
+    : process.env.CORS_DOMAINS?.split(',');
+
+  app.enableCors({
+    allowedHeaders: '*',
+    origin: whitelist,
+    methods: '*',
+    credentials: true,
+  });
+
+  await app.listen(port, () => {
+    console.log(`Listening at http://localhost:${port}/`);
+  });
 }
 bootstrap();
