@@ -28,7 +28,7 @@ export default registerAs(DATABASE_CONFIG, () => {
   });
 
   if (error) {
-    throw new Error(`Invalid database config: ${error.message}`);
+    throw new Error(`Invalid database config : ${error.message}`);
   }
 
   return {
