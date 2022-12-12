@@ -5,12 +5,12 @@ import { join } from 'path';
 import { AppController } from './app.controller';
 import { ConfigModule } from './config/config.module';
 import databaseConfig from './config/database.config';
-import { UsersModule } from './users/users.module';
+import { ProfessionalsModule } from './professionals/professionals.module';
 
 @Module({
   imports: [
     ConfigModule,
-    UsersModule,
+    ProfessionalsModule,
     TypeOrmModule.forRootAsync({
       useFactory: async (
         dbConfig: ConfigType<typeof databaseConfig>,

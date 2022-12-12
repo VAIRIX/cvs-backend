@@ -50,7 +50,7 @@ const users = [
 ];
 
 @Injectable()
-export class UsersService {
+export class ProfessionalsService {
   public async getMany(): Promise<any> {
     return users;
   }
