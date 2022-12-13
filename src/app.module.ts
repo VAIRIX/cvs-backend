@@ -6,6 +6,9 @@ import { AppController } from './app.controller';
 import { ConfigModule } from './config/config.module';
 import databaseConfig from './config/database.config';
 import { ProfessionalsModule } from './professionals/professionals.module';
+import { AuthModule } from './auth/auth.module';
+import { AppService } from './app.service';
+import { RepositoriesModule } from './repositories/repositories.module';
 
 @Module({
   imports: [
@@ -26,7 +29,10 @@ import { ProfessionalsModule } from './professionals/professionals.module';
       }),
       inject: [databaseConfig.KEY],
     }),
+    AuthModule,
+    RepositoriesModule,
   ],
   controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

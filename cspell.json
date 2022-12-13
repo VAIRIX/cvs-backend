@@ -1,6 +1,6 @@
 {
   "version": "0.2",
-  "words": ["nestjs", "typeorm", "pgdata", "dbname"],
+  "words": ["nestjs", "typeorm", "pgdata", "dbname", "dtos"],
   "language": "en",
   "ignorePaths": [
     "**/node_modules/**",

@@ -16,15 +16,6 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    environment:
-      - DATABASE_TYPE=${DATABASE_TYPE}
-      - DATABASE_HOST=${DATABASE_HOST}
-      - DATABASE_USER=${DATABASE_USER}
-      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
-      - DATABASE_NAME=${DATABASE_NAME}
-      - DATABASE_PORT=${DATABASE_PORT}
-      - APP_PORT=${APP_PORT}
-      - CORS_DOMAINS=${CORS_DOMAINS}
     ports:
       - '3000:${APP_PORT}'
     container_name: backend-api
