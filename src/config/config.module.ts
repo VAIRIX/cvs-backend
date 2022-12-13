@@ -9,7 +9,7 @@ import databaseConfig from './database.config';
       isGlobal: true,
       load: [databaseConfig],
       validationSchema: Joi.object({
-        APP_PORT: Joi.number().default(3000),
+        APP_PORT: Joi.number().default(3001),
       }),
     }),
   ],
