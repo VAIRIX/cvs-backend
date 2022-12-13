@@ -15,7 +15,7 @@ export class AppService implements OnApplicationBootstrap {
     const admin = await this.adminRepository.findByUsername(
       this.authConf.adminUsername,
     );
-    if (!admin && true) {
+    if (!admin) {
       await this.adminRepository.create({
         username: this.authConf.adminUsername,
         password: this.authConf.adminPassword,
