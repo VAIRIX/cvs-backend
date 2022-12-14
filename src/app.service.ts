@@ -1,24 +1,29 @@
 import { Inject, Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import authConfig from './config/auth.config';
-import { AdminRepository } from './repositories/admin.repository';
+import { AdminEntity } from './entities';
+import { hash } from './utils/hash';
 
 @Injectable()
 export class AppService implements OnApplicationBootstrap {
   constructor(
     @Inject(authConfig.KEY)
     private readonly authConf: ConfigType<typeof authConfig>,
-    private readonly adminRepository: AdminRepository,
+    @InjectRepository(AdminEntity)
+    private adminRepository: Repository<AdminEntity>,
   ) {}
 
   async onApplicationBootstrap() {
-    const admin = await this.adminRepository.findByUsername(
-      this.authConf.adminUsername,
-    );
-    if (!admin && true) {
-      await this.adminRepository.create({
+    const admin = await this.adminRepository.findOneBy({
+      username: this.authConf.adminUsername,
+    });
+    if (!admin) {
+      const hashPassword = await hash(this.authConf.adminPassword);
+      await this.adminRepository.save({
         username: this.authConf.adminUsername,
-        password: this.authConf.adminPassword,
+        password: hashPassword,
       });
     }
   }

@@ -1,3 +1,1 @@
-import { AdminEntity } from './admin.entity';
-
-export const ENTITIES = [AdminEntity];
+export * from './admin.entity';

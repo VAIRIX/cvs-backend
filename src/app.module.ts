@@ -8,10 +8,11 @@ import databaseConfig from './config/database.config';
 import { ProfessionalsModule } from './professionals/professionals.module';
 import { AuthModule } from './auth/auth.module';
 import { AppService } from './app.service';
-import { RepositoriesModule } from './repositories/repositories.module';
+import { AdminEntity } from './entities';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([AdminEntity]),
     ConfigModule,
     ProfessionalsModule,
     TypeOrmModule.forRootAsync({
@@ -30,7 +31,6 @@ import { RepositoriesModule } from './repositories/repositories.module';
       inject: [databaseConfig.KEY],
     }),
     AuthModule,
-    RepositoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
