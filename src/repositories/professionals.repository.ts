@@ -12,7 +12,7 @@ export class ProfessionalsRepository extends Repository<ProfessionalEntity> {
   public async getProfessionals(
     filterDto: Req.GetProfessionalsFilterDto,
   ): Promise<ProfessionalEntity[]> {
-    const { search, min_english, max_english } = filterDto;
+    const { search, minEnglish, maxEnglish } = filterDto;
 
     const query = this.createQueryBuilder('professional');
 
@@ -23,17 +23,11 @@ export class ProfessionalsRepository extends Repository<ProfessionalEntity> {
       );
     }
 
-    if (min_english) {
-      query.andWhere('professional.english >= :minEnglish', {
-        minEnglish: min_english,
-      });
-    }
+    if (minEnglish)
+      query.andWhere('professional.english >= :minEnglish', { minEnglish });
 
-    if (max_english) {
-      query.andWhere('professional.english =< :maxEnglish', {
-        maxEnglish: max_english,
-      });
-    }
+    if (maxEnglish)
+      query.andWhere('professional.english =< :maxEnglish', { maxEnglish });
 
     const professionals = await query.getMany();
 

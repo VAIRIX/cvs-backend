@@ -7,9 +7,9 @@ export class GetProfessionalsFilterDto {
 
   @IsOptional()
   @IsNumber()
-  min_english: number;
+  minEnglish: number;
 
   @IsOptional()
   @IsNumber()
-  max_english: number;
+  maxEnglish: number;
 }
