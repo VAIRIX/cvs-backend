@@ -1,6 +1,6 @@
 {
   "version": "0.2",
-  "words": ["nestjs", "typeorm", "pgdata", "dbname", "dtos"],
+  "words": ["dbname", "dtos", "googleauth", "nestjs", "pgdata", "typeorm"],
   "language": "en",
   "ignorePaths": [
     "**/node_modules/**",
@@ -16,6 +16,7 @@
     "./eslint.js",
     "./commitlint.config.js",
     "./cspell.json",
-    "./pgdata/**"
+    "./pgdata/**",
+    "./google_cloud_credentials.json"
   ]
 }
