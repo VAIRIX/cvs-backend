@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common/exceptions';
+import { plainToInstance } from 'class-transformer';
 import { Req } from 'src/dtos';
 import { ProfessionalResDto } from 'src/dtos/res/professional-res.dto';
 import { ProfessionalsRepository } from '../repositories/professionals.repository';
@@ -11,8 +12,12 @@ export class ProfessionalsService {
   public async getProfessionals(
     professionalsFilterDto: Req.GetProfessionalsFilterDto,
   ): Promise<ProfessionalResDto[]> {
-    return this.professionalsRepository.getProfessionals(
+    const professionals = await this.professionalsRepository.getProfessionals(
       professionalsFilterDto,
+    );
+
+    return professionals.map((professional) =>
+      plainToInstance(ProfessionalResDto, professional),
     );
   }
 
@@ -21,13 +26,16 @@ export class ProfessionalsService {
       id,
     });
 
-    return professional;
+    return plainToInstance(ProfessionalResDto, professional);
   }
 
   public async createProfessional(
     professional: Req.CreateProfessionalDto,
   ): Promise<ProfessionalResDto> {
-    return this.professionalsRepository.createProfessional(professional);
+    return plainToInstance(
+      ProfessionalResDto,
+      this.professionalsRepository.createProfessional(professional),
+    );
   }
 
   public async updateProfessional(
@@ -38,7 +46,7 @@ export class ProfessionalsService {
 
     const updatedProfessional = await this.getProfessionalById(id);
 
-    return updatedProfessional;
+    return plainToInstance(ProfessionalResDto, updatedProfessional);
   }
 
   public async deleteProfessional(id: string): Promise<void> {
