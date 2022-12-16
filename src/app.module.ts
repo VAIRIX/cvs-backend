@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { AppService } from './app.service';
 import { AdminEntity } from './entities';
 import { ResumeBuilderModule } from './resume-builder/resume-builder.module';
+import { GoogleModule } from './google/google.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ResumeBuilderModule } from './resume-builder/resume-builder.module';
     }),
     AuthModule,
     ResumeBuilderModule,
+    GoogleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
