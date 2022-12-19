@@ -9,6 +9,8 @@ import { ProfessionalsModule } from './professionals/professionals.module';
 import { AuthModule } from './auth/auth.module';
 import { AppService } from './app.service';
 import { AdminEntity } from './entities';
+import { ResumeBuilderModule } from './resume-builder/resume-builder.module';
+import { GoogleModule } from './google/google.module';
 
 @Module({
   imports: [
@@ -31,6 +33,8 @@ import { AdminEntity } from './entities';
       inject: [databaseConfig.KEY],
     }),
     AuthModule,
+    ResumeBuilderModule,
+    GoogleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
