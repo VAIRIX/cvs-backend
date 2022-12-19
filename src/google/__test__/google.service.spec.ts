@@ -18,8 +18,6 @@ describe('GoogleService', () => {
             googleDocBaseUrl: 'googleDocBaseUrl',
             googleDriveFolderId: 'googleDriveFolderId',
             googleDocTemplateId: 'googleDocTemplateId',
-            googleDriveApiVersion: 'googleDriveApiVersion',
-            googleDocApiVersion: 'googleDocApiVersion',
             googleDocTemplateMaxProjects: 'googleDocTemplateMaxProjects',
             googleDocTemplateFields: 'googleDocTemplateFields',
           },

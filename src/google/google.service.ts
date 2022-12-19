@@ -8,7 +8,7 @@ import { JSONClient } from 'google-auth-library/build/src/auth/googleauth';
 import { Compute } from 'google-auth-library';
 import googleConfig from 'src/config/google.config';
 import { ConfigType } from '@nestjs/config';
-import { google } from 'googleapis';
+import { docs_v1, drive_v3, google } from 'googleapis';
 import { GoogleReplaceRequest } from 'src/types';
 
 @Injectable()
@@ -16,6 +16,8 @@ export class GoogleService implements OnApplicationBootstrap {
   private readonly logger = new Logger(GoogleService.name);
 
   private authClient: JSONClient | Compute;
+  private driveConnection: drive_v3.Drive;
+  private docsConnection: docs_v1.Docs;
 
   constructor(
     @Inject(googleConfig.KEY)
@@ -24,8 +26,17 @@ export class GoogleService implements OnApplicationBootstrap {
   async onApplicationBootstrap() {
     try {
       await this.authorizeGoogleDrive();
+      this.driveConnection = google.drive({
+        version: 'v3',
+        auth: this.authClient,
+      });
+      this.docsConnection = google.docs({
+        version: 'v1',
+        auth: this.authClient,
+      });
     } catch (error) {
       this.logger.error(error);
+      process.exit(1);
     }
   }
 
@@ -39,60 +50,32 @@ export class GoogleService implements OnApplicationBootstrap {
   }
 
   async getTemplateCopyId(professionalName: string): Promise<string> {
-    const drive = google.drive({
-      version: this.googleConf.googleDriveApiVersion,
-      auth: this.authClient,
+    const copyTemplateRequest = {
+      name: professionalName,
+      parents: [this.googleConf.googleDriveFolderId],
+    };
+
+    const response = await this.driveConnection.files.copy({
+      fileId: this.googleConf.googleDocTemplateId,
+      requestBody: copyTemplateRequest,
     });
 
-    return new Promise((resolve, reject) => {
-      const copyTemplateRequest = {
-        name: professionalName,
-        parents: [this.googleConf.googleDriveFolderId],
-      };
-
-      drive.files.copy(
-        {
-          fileId: this.googleConf.googleDocTemplateId,
-          requestBody: copyTemplateRequest,
-        },
-        function (err, response) {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(response.data.id);
-          }
-        },
-      );
-    });
+    return response.data.id;
   }
 
   async fillTemplate(
     documentId: string,
     requests: GoogleReplaceRequest[],
   ): Promise<string> {
-    const docs = google.docs({
-      version: this.googleConf.googleDocApiVersion,
+    const response = await this.docsConnection.documents.batchUpdate({
       auth: this.authClient,
+      documentId: documentId,
+      requestBody: {
+        requests,
+      },
     });
 
-    return new Promise((resolve, reject) => {
-      docs.documents.batchUpdate(
-        {
-          auth: this.authClient,
-          documentId: documentId,
-          requestBody: {
-            requests,
-          },
-        },
-        (err) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(`${this.googleConf.googleDocBaseUrl}${documentId}`);
-          }
-        },
-      );
-    });
+    return `${this.googleConf.googleDocBaseUrl}${response.data.documentId}`;
   }
 
   createReplaceRequestObject(

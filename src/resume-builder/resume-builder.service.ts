@@ -10,8 +10,9 @@ import { ConfigType } from '@nestjs/config';
 import { GoogleDocTemplateFields, GoogleReplaceRequest } from 'src/types/';
 import { Req, Res } from 'src/dtos';
 import { API_RESPONSE_MESSAGES } from 'src/constants/api-response-messages';
-import { mockProfessionalData } from './mock-professional-data';
+import { mockProfessionalData } from './__mock__/mock-professional-data';
 import { GoogleService } from 'src/google/google.service';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class ResumeBuilderService {
@@ -47,7 +48,7 @@ export class ResumeBuilderService {
         replaceRequests,
       );
 
-      return { resumeUrl };
+      return plainToInstance(Res.BuildResumeResDto, { resumeUrl });
     } catch (error) {
       this.logger.error(error);
       throw new InternalServerErrorException(

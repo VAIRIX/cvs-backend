@@ -26,8 +26,6 @@ export default registerAs(GOOGLE_CONFIG, () => {
     googleDocBaseUrl: process.env.GOOGLE_DOC_BASE_URL,
     googleDriveFolderId: process.env.GOOGLE_DRIVE_FOLDER_ID,
     googleDocTemplateId: process.env.GOOGLE_DOC_TEMPLATE_ID,
-    googleDriveApiVersion: process.env.GOOGLE_DRIVE_API_VERSION,
-    googleDocApiVersion: process.env.GOOGLE_DOC_API_VERSION,
     googleDocTemplateMaxProjects: process.env.GOOGLE_DOC_TEMPLATE_MAX_PROJECTS,
     googleDocTemplateFields,
   };
@@ -38,8 +36,6 @@ export default registerAs(GOOGLE_CONFIG, () => {
     googleDocBaseUrl: Joi.string().required(),
     googleDriveFolderId: Joi.string().required(),
     googleDocTemplateId: Joi.string().required(),
-    googleDriveApiVersion: Joi.string().required(),
-    googleDocApiVersion: Joi.string().required(),
     googleDocTemplateMaxProjects: Joi.number().required(),
     googleDocTemplateFields: Joi.object().required(),
   });
@@ -59,8 +55,6 @@ export default registerAs(GOOGLE_CONFIG, () => {
     googleDocBaseUrl: value.googleDocBaseUrl,
     googleDriveFolderId: value.googleDriveFolderId,
     googleDocTemplateId: value.googleDocTemplateId,
-    googleDriveApiVersion: value.googleDriveApiVersion,
-    googleDocApiVersion: value.googleDocApiVersion,
     googleDocTemplateMaxProjects: value.googleDocTemplateMaxProjects,
     googleDocTemplateFields: value.googleDocTemplateFields,
   } as const;
