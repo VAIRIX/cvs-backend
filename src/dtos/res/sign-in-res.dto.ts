@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Expose } from 'class-transformer';
 
 export class SignInResDto {
   @ApiProperty({ type: String })
-  public accessToken?: string;
+  @Expose()
+  public access_token?: string;
 }

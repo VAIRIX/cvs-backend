@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Req } from '../dtos';
+import { Req, Res } from '../dtos';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AdminEntity } from 'src/entities';
 import { Repository } from 'typeorm';
 import { compare } from 'src/utils/hash';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class AuthService {
@@ -21,9 +22,9 @@ export class AuthService {
     const validPassword = await compare(signInReqDto.password, user?.password);
     if (user && validPassword) {
       const payload = { username: user.username, sub: user.id };
-      return {
+      return plainToInstance(Res.SignInResDto, {
         access_token: this.jwtService.sign({ payload }),
-      };
+      });
     }
     return null;
   }

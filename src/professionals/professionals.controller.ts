@@ -7,40 +7,52 @@ import {
   HttpStatus,
   Param,
   Post,
+  Put,
+  Query,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { Req } from 'src/dtos';
+import { ProfessionalResDto } from 'src/dtos/res/professional-res.dto';
 import { ProfessionalsService } from './professionals.service';
 
+@UseGuards(JwtAuthGuard)
 @Controller('professionals')
 export class ProfessionalsController {
   constructor(private readonly professionalsService: ProfessionalsService) {}
 
   @Get()
-  @HttpCode(HttpStatus.OK)
-  public getMany(): Promise<any> {
-    return this.professionalsService.getMany();
+  public getProfessionals(
+    @Query() professionalsFilterDto: Req.GetProfessionalsFilterDto,
+  ): Promise<ProfessionalResDto[]> {
+    return this.professionalsService.getProfessionals(professionalsFilterDto);
   }
 
   @Get(':id')
-  @HttpCode(HttpStatus.OK)
-  public getOne(@Param('id') id: number): Promise<any> {
-    return this.professionalsService.getOne(Number(id));
+  public getProfessionalById(
+    @Param('id') id: string,
+  ): Promise<ProfessionalResDto> {
+    return this.professionalsService.getProfessionalById(id);
   }
 
   @Post()
-  @HttpCode(HttpStatus.CREATED)
-  public create(@Body() user: any): Promise<any> {
-    return this.professionalsService.create(user);
+  public createProfessional(
+    @Body() professional: Req.CreateProfessionalDto,
+  ): Promise<ProfessionalResDto> {
+    return this.professionalsService.createProfessional(professional);
   }
 
-  @Post(':id')
-  @HttpCode(HttpStatus.OK)
-  public update(@Body() user: any): Promise<any> {
-    return this.professionalsService.update(user.id, user);
+  @Put(':id')
+  public updateProfessional(
+    @Param('id') id: string,
+    @Body() professional: Req.CreateProfessionalDto,
+  ): Promise<ProfessionalResDto> {
+    return this.professionalsService.updateProfessional(id, professional);
   }
 
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  @HttpCode(HttpStatus.OK)
-  public delete(@Param('id') id: number): Promise<any> {
-    return this.professionalsService.delete(Number(id));
+  public delete(@Param('id') id: string): Promise<void> {
+    return this.professionalsService.deleteProfessional(id);
   }
 }

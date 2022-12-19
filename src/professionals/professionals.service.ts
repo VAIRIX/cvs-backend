@@ -1,79 +1,59 @@
 import { Injectable } from '@nestjs/common';
-
-const users = [
-  {
-    id: 1,
-    name: 'Leanne Graham',
-    username: 'Bret',
-    email: 'Sincere@april.biz',
-    address: {
-      street: 'Lucas Light',
-      suite: 'Apt. 556',
-      city: 'Montevideo',
-      zip: '92998-3874',
-      geo: {
-        lat: '-37.3159',
-        lng: '81.1496',
-      },
-    },
-    phone: '1-770-736-8031 x56442',
-    website: 'hildegard.org',
-    company: {
-      name: 'Pedro',
-      catchPhrase: 'Multi-layered client-server neural-net',
-      bs: 'harness real-time e-markets',
-    },
-  },
-  {
-    id: 2,
-    name: 'Ervin Howell',
-    username: 'lucas',
-    email: 'Shanna@melissa.tv',
-    address: {
-      street: 'Victor Plains',
-      suite: 'Suite 879',
-      city: 'Montevideo',
-      zip: '90566-7771',
-      geo: {
-        lat: '-43.9509',
-        lng: '-34.4618',
-      },
-    },
-    phone: '010-692-6593 x09125',
-    website: 'anastasia.net',
-    company: {
-      name: 'Microsoft',
-      catchPhrase: 'Proactive didactic contingency',
-      bs: 'supply scalable supply-chains',
-    },
-  },
-];
+import { NotFoundException } from '@nestjs/common/exceptions';
+import { plainToInstance } from 'class-transformer';
+import { Req } from 'src/dtos';
+import { ProfessionalResDto } from 'src/dtos/res/professional-res.dto';
+import { ProfessionalsRepository } from '../repositories/professionals.repository';
 
 @Injectable()
 export class ProfessionalsService {
-  public async getMany(): Promise<any> {
-    return users;
+  constructor(private professionalsRepository: ProfessionalsRepository) {}
+
+  public async getProfessionals(
+    professionalsFilterDto: Req.GetProfessionalsFilterDto,
+  ): Promise<ProfessionalResDto[]> {
+    const professionals = await this.professionalsRepository.getProfessionals(
+      professionalsFilterDto,
+    );
+
+    return professionals.map((professional) =>
+      plainToInstance(ProfessionalResDto, professional),
+    );
   }
 
-  public async getOne(id: number): Promise<any> {
-    return users.find((user) => user.id === id);
+  public async getProfessionalById(id: string): Promise<ProfessionalResDto> {
+    const professional = await this.professionalsRepository.findOneByOrFail({
+      id,
+    });
+
+    return plainToInstance(ProfessionalResDto, professional);
   }
 
-  public async create(user: any): Promise<any> {
-    user.id = users.length + 1;
-    users.push(user);
-    return user;
+  public async createProfessional(
+    professional: Req.CreateProfessionalDto,
+  ): Promise<ProfessionalResDto> {
+    return plainToInstance(
+      ProfessionalResDto,
+      this.professionalsRepository.createProfessional(professional),
+    );
   }
 
-  public async update(id: number, user: any): Promise<any> {
-    const index = users.findIndex((user) => user.id === id);
-    users[index] = user;
-    return user;
+  public async updateProfessional(
+    id: string,
+    professional: Req.CreateProfessionalDto,
+  ): Promise<ProfessionalResDto> {
+    await this.professionalsRepository.update(id, { ...professional });
+
+    const updatedProfessional = await this.getProfessionalById(id);
+
+    return plainToInstance(ProfessionalResDto, updatedProfessional);
   }
 
-  public async delete(id: number): Promise<any> {
-    const index = users.findIndex((user) => user.id === id);
-    users.splice(index, 1);
-    return { id };
+  public async deleteProfessional(id: string): Promise<void> {
+    const result = await this.professionalsRepository.delete(id);
+
+    if (result.affected === 0) {
+      throw new NotFoundException(`Professional with ID "${id}" was not found`);
+    }
   }
 }
