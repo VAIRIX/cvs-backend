@@ -1,9 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
-import { AdminEntity } from 'src/entities';
 import { AuthService } from '../auth.service';
-import { Repository } from 'typeorm';
+import { AdminsRepository } from 'src/repositories';
+jest.mock('../../repositories/admins.repository');
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -18,10 +17,7 @@ describe('AuthService', () => {
             sign: jest.fn(),
           },
         },
-        {
-          provide: getRepositoryToken(AdminEntity),
-          useClass: Repository,
-        },
+        AdminsRepository,
       ],
     }).compile();
 

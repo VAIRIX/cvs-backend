@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ProfessionalsRepository } from 'src/repositories/professionals.repository';
+import { ProfessionalsRepository } from 'src/repositories';
 import { ProfessionalsService } from '../professionals.service';
 
 jest.mock('../../repositories/professionals.repository');

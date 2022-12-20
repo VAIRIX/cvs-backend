@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
-import { AppController } from './app.controller';
 import { ConfigModule } from './config/config.module';
 import databaseConfig from './config/database.config';
 import { ProfessionalsModule } from './professionals/professionals.module';
@@ -11,6 +10,7 @@ import { AppService } from './app.service';
 import { AdminEntity } from './entities';
 import { ResumeBuilderModule } from './resume-builder/resume-builder.module';
 import { GoogleModule } from './google/google.module';
+import { AdminsRepository } from 'src/repositories';
 
 @Module({
   imports: [
@@ -36,7 +36,6 @@ import { GoogleModule } from './google/google.module';
     ResumeBuilderModule,
     GoogleModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AdminsRepository],
 })
 export class AppModule {}
