@@ -1,24 +1,28 @@
 version: '3'
 services:
-  db:
+  postgres:
     image: postgres
     restart: always
     environment:
-      - POSTGRES_USER=${DATABASE_USER}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
-      - POSTGRES_DB=${DATABASE_NAME}
     volumes:
       - ./pgdata:/var/lib/postgresql/data
     ports:
       - '5432:5432'
-    container_name: postgres-db
-  nestjs:
+  backend:
+    environment:
+      - APP_PORT=${APP_PORT}
+      - CORS_DOMAINS=${CORS_DOMAINS}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_PORT=${DATABASE_PORT}
+      - DATABASE_HOST=${DATABASE_HOST}
+      - DATABASE_TYPE=${DATABASE_TYPE}
     build:
       context: .
-      dockerfile: ./Dockerfile
     ports:
       - '3000:${APP_PORT}'
-    container_name: backend-api
     depends_on:
       - db
     volumes:
