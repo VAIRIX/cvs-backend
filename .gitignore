@@ -36,4 +36,7 @@ lerna-debug.log*
 
 .env
 pgdata
-google_cloud_credentials.json
+src/config/env/google_cloud_credentials.json
+
+**/*.env
+!src/config/env/example.env

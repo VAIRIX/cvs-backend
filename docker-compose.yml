@@ -1,24 +1,42 @@
 version: '3'
 services:
   db:
-    image: postgres
+    image: postgres:15
     restart: always
     environment:
-      - POSTGRES_USER=${DATABASE_USER}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
       - POSTGRES_DB=${DATABASE_NAME}
     volumes:
       - ./pgdata:/var/lib/postgresql/data
     ports:
       - '5432:5432'
-    container_name: postgres-db
-  nestjs:
+    container_name: db
+  api:
+    environment:
+      - APP_PORT=${APP_PORT}
+      - CORS_DOMAINS=${CORS_DOMAINS}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_PORT=${DATABASE_PORT}
+      - DATABASE_HOST=${DATABASE_HOST}
+      - DATABASE_TYPE=${DATABASE_TYPE}
+      - AUTH_JWT_SECRET=${AUTH_JWT_SECRET}
+      - AUTH_JWT_EXPIRATION_TIME=${AUTH_JWT_EXPIRATION_TIME}
+      - AUTH_ADMIN_USER=${AUTH_ADMIN_USER}
+      - AUTH_ADMIN_PASSWORD=${AUTH_ADMIN_PASSWORD}
+      - GOOGLE_API_SERVICE_ACCOUNT_FILE=${GOOGLE_API_SERVICE_ACCOUNT_FILE}
+      - GOOGLE_API_SCOPE=${GOOGLE_API_SCOPE}
+      - GOOGLE_DOC_BASE_URL=${GOOGLE_DOC_BASE_URL}
+      - GOOGLE_DRIVE_FOLDER_ID=${GOOGLE_DRIVE_FOLDER_ID}
+      - GOOGLE_DOC_TEMPLATE_ID=${GOOGLE_DOC_TEMPLATE_ID}
+      - GOOGLE_DOC_TEMPLATE_MAX_PROJECTS=${GOOGLE_DOC_TEMPLATE_MAX_PROJECTS}
     build:
+      dockerfile: Dockerfile.dev
       context: .
-      dockerfile: ./Dockerfile
+    container_name: api
     ports:
       - '3000:${APP_PORT}'
-    container_name: backend-api
     depends_on:
       - db
     volumes:
