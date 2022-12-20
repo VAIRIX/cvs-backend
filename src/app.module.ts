@@ -4,14 +4,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { ConfigModule } from './config/config.module';
 import databaseConfig from './config/database.config';
-import { ProfessionalsModule } from './professionals/professionals.module';
-import { AuthModule } from './auth/auth.module';
+import { ProfessionalsModule } from './modules/professionals/professionals.module';
 import { AppService } from './app.service';
 import { AdminEntity } from './entities';
-import { ResumeBuilderModule } from './resume-builder/resume-builder.module';
-import { GoogleModule } from './google/google.module';
+import { ResumeBuilderModule } from './modules/resume-builder/resume-builder.module';
+import { GoogleModule } from './modules/google/google.module';
 import { AdminsRepository } from 'src/repositories';
 import { ProjectsModule } from './projects/projects.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
