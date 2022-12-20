@@ -7,6 +7,7 @@ import authConfig from 'src/config/auth.config';
 import { ConfigType } from '@nestjs/config';
 import { AdminEntity } from 'src/entities';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AdminsRepository } from 'src/repositories';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       inject: [authConfig.KEY],
     }),
   ],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, AdminsRepository],
   controllers: [AuthController],
 })
 export class AuthModule {}

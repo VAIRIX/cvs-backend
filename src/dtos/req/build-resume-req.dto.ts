@@ -3,6 +3,6 @@ import { IsString } from 'class-validator';
 
 export class BuildResumeReqDto {
   @IsString()
-  @ApiProperty({ type: String, required: true })
+  @ApiProperty({ type: String })
   public professionalId!: string;
 }

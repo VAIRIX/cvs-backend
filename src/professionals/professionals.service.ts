@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common/exceptions';
 import { plainToInstance } from 'class-transformer';
-import { Req } from 'src/dtos';
-import { ProfessionalResDto } from 'src/dtos/res/professional-res.dto';
-import { ProfessionalsRepository } from '../repositories/professionals.repository';
+import { Req, Res } from 'src/dtos';
+import { ProfessionalsRepository } from 'src/repositories';
 
 @Injectable()
 export class ProfessionalsService {
@@ -11,29 +10,31 @@ export class ProfessionalsService {
 
   public async getProfessionals(
     professionalsFilterDto: Req.GetProfessionalsFilterDto,
-  ): Promise<ProfessionalResDto[]> {
+  ): Promise<Res.ProfessionalResDto[]> {
     const professionals = await this.professionalsRepository.getProfessionals(
       professionalsFilterDto,
     );
 
     return professionals.map((professional) =>
-      plainToInstance(ProfessionalResDto, professional),
+      plainToInstance(Res.ProfessionalResDto, professional),
     );
   }
 
-  public async getProfessionalById(id: string): Promise<ProfessionalResDto> {
+  public async getProfessionalById(
+    id: string,
+  ): Promise<Res.ProfessionalResDto> {
     const professional = await this.professionalsRepository.findOneByOrFail({
       id,
     });
 
-    return plainToInstance(ProfessionalResDto, professional);
+    return plainToInstance(Res.ProfessionalResDto, professional);
   }
 
   public async createProfessional(
     professional: Req.CreateProfessionalDto,
-  ): Promise<ProfessionalResDto> {
+  ): Promise<Res.ProfessionalResDto> {
     return plainToInstance(
-      ProfessionalResDto,
+      Res.ProfessionalResDto,
       this.professionalsRepository.createProfessional(professional),
     );
   }
@@ -41,12 +42,12 @@ export class ProfessionalsService {
   public async updateProfessional(
     id: string,
     professional: Req.CreateProfessionalDto,
-  ): Promise<ProfessionalResDto> {
+  ): Promise<Res.ProfessionalResDto> {
     await this.professionalsRepository.update(id, { ...professional });
 
     const updatedProfessional = await this.getProfessionalById(id);
 
-    return plainToInstance(ProfessionalResDto, updatedProfessional);
+    return plainToInstance(Res.ProfessionalResDto, updatedProfessional);
   }
 
   public async deleteProfessional(id: string): Promise<void> {

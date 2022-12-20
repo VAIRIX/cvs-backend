@@ -9,44 +9,51 @@ import {
   Post,
   Put,
   Query,
-  UseGuards,
 } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { Req } from 'src/dtos';
-import { ProfessionalResDto } from 'src/dtos/res/professional-res.dto';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { Req, Res } from 'src/dtos';
 import { ProfessionalsService } from './professionals.service';
 
-@UseGuards(JwtAuthGuard)
 @Controller('professionals')
+@ApiBearerAuth()
+@ApiTags('Professionals')
 export class ProfessionalsController {
   constructor(private readonly professionalsService: ProfessionalsService) {}
 
   @Get()
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ type: Res.ProfessionalResDto, isArray: true })
   public getProfessionals(
     @Query() professionalsFilterDto: Req.GetProfessionalsFilterDto,
-  ): Promise<ProfessionalResDto[]> {
+  ): Promise<Res.ProfessionalResDto[]> {
     return this.professionalsService.getProfessionals(professionalsFilterDto);
   }
 
   @Get(':id')
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ type: Res.ProfessionalResDto })
   public getProfessionalById(
     @Param('id') id: string,
-  ): Promise<ProfessionalResDto> {
+  ): Promise<Res.ProfessionalResDto> {
     return this.professionalsService.getProfessionalById(id);
   }
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOkResponse({ type: Res.ProfessionalResDto })
   public createProfessional(
     @Body() professional: Req.CreateProfessionalDto,
-  ): Promise<ProfessionalResDto> {
+  ): Promise<Res.ProfessionalResDto> {
     return this.professionalsService.createProfessional(professional);
   }
 
   @Put(':id')
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ type: Res.ProfessionalResDto })
   public updateProfessional(
     @Param('id') id: string,
     @Body() professional: Req.CreateProfessionalDto,
-  ): Promise<ProfessionalResDto> {
+  ): Promise<Res.ProfessionalResDto> {
     return this.professionalsService.updateProfessional(id, professional);
   }
 
