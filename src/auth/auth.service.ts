@@ -21,7 +21,7 @@ export class AuthService {
     if (user && validPassword) {
       const payload = { username: user.username, sub: user.id };
       return plainToInstance(Res.SignInResDto, {
-        access_token: this.jwtService.sign({ payload }),
+        accessToken: this.jwtService.sign({ payload }),
       });
     }
     throw new UnauthorizedException(API_RESPONSE_MESSAGES.INVALID_CREDENTIALS);
