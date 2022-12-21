@@ -4,5 +4,5 @@ import { Expose } from 'class-transformer';
 export class SignInResDto {
   @ApiProperty({ type: String })
   @Expose()
-  public access_token?: string;
+  public accessToken?: string;
 }
