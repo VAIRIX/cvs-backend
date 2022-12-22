@@ -13,9 +13,7 @@ import { AdminsRepository } from 'src/repositories';
   imports: [
     TypeOrmModule.forFeature([AdminEntity]),
     JwtModule.registerAsync({
-      useFactory: async (
-        authConf: ConfigType<typeof authConfig>,
-      ): Promise<object> => ({
+      useFactory: (authConf: ConfigType<typeof authConfig>): object => ({
         secret: authConf.jwtSecret,
         signOptions: {
           expiresIn: authConf.jwtExpirationTime,
