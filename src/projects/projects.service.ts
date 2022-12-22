@@ -6,7 +6,7 @@ import { ProjectsRepository } from 'src/repositories';
 
 @Injectable()
 export class ProjectsService {
-  constructor(private projectsRepository: ProjectsRepository) {}
+  constructor(private readonly projectsRepository: ProjectsRepository) {}
 
   public async getProjects(
     projectsFilterDto: Req.GetProjectsFilterDto,
@@ -31,10 +31,9 @@ export class ProjectsService {
   public async createProject(
     project: Req.CreateProjectDto,
   ): Promise<Res.ProjectResDto> {
-    return plainToInstance(
-      Res.ProjectResDto,
-      this.projectsRepository.createProject(project),
-    );
+    const createdProject = await this.projectsRepository.createProject(project);
+
+    return plainToInstance(Res.ProjectResDto, createdProject);
   }
 
   public async updateProject(
