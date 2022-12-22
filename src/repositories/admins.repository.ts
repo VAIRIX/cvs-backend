@@ -7,8 +7,4 @@ export class AdminsRepository extends Repository<AdminEntity> {
   constructor(private dataSource: DataSource) {
     super(AdminEntity, dataSource.createEntityManager());
   }
-
-  async findByUsername(username: string): Promise<AdminEntity> {
-    return this.findOneBy({ username });
-  }
 }
