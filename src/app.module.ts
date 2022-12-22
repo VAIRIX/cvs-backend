@@ -10,7 +10,7 @@ import { AdminEntity } from './entities';
 import { ResumeBuilderModule } from './modules/resume-builder/resume-builder.module';
 import { GoogleModule } from './modules/google/google.module';
 import { AdminsRepository } from 'src/repositories';
-import { ProjectsModule } from './projects/projects.module';
+import { ProjectsModule } from './modules/projects/projects.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { SeedModule } from './modules/seed/seed.module';
 
