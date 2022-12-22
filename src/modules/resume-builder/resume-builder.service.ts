@@ -7,12 +7,19 @@ import {
 } from '@nestjs/common';
 import googleConfig from 'src/config/google.config';
 import { ConfigType } from '@nestjs/config';
-import { GoogleDocTemplateFields, GoogleReplaceRequest } from 'src/types/';
+import {
+  GoogleDocTemplateFields,
+  GoogleReplaceRequest,
+  ProfessionalResumeData,
+  ProjectResumeData,
+} from 'src/types/';
 import { Req, Res } from 'src/dtos';
 import { API_RESPONSE_MESSAGES } from 'src/constants/api-response-messages';
-import { mockProfessionalData } from './__mock__/mock-professional-data';
 import { GoogleService } from 'src/modules/google/google.service';
 import { plainToInstance } from 'class-transformer';
+import { ProfessionalsRepository } from 'src/repositories';
+import { ProfessionalEntity, TechnologyEntity } from 'src/entities';
+import { format } from 'date-fns';
 
 @Injectable()
 export class ResumeBuilderService {
@@ -24,6 +31,7 @@ export class ResumeBuilderService {
     @Inject(googleConfig.KEY)
     private readonly googleConf: ConfigType<typeof googleConfig>,
     private readonly googleService: GoogleService,
+    private readonly professionalsRepository: ProfessionalsRepository,
   ) {
     this.googleDocTemplateFields = this.googleConf.googleDocTemplateFields;
   }
@@ -31,18 +39,29 @@ export class ResumeBuilderService {
   async generateResume(
     buildResumeReqDto: Req.BuildResumeReqDto,
   ): Promise<Res.BuildResumeResDto> {
-    // TODO: Get professional data from database
-    const professionalData = mockProfessionalData.find(
-      (professional) => professional.id === buildResumeReqDto.professionalId,
-    );
-    if (!professionalData) {
+    const professional = await this.professionalsRepository.findOne({
+      where: { id: buildResumeReqDto.professionalId },
+      relations: [
+        'projects',
+        'projects.project',
+        'technologies',
+        'projects.project.technologies',
+      ],
+    });
+
+    if (!professional) {
       throw new NotFoundException(API_RESPONSE_MESSAGES.PROFESSIONAL_NOT_FOUND);
     }
+
+    const professionalResumeData =
+      this.createProfessionalResumeData(professional);
     try {
       const templateId = await this.googleService.getTemplateCopyId(
-        professionalData.name,
+        professionalResumeData.name,
       );
-      const replaceRequests = this.createReplaceRequests(professionalData);
+      const replaceRequests = this.createReplaceRequests(
+        professionalResumeData,
+      );
       const resumeUrl = await this.googleService.fillTemplate(
         templateId,
         replaceRequests,
@@ -57,14 +76,18 @@ export class ResumeBuilderService {
     }
   }
 
-  private createReplaceRequests(professionalData: any): GoogleReplaceRequest[] {
+  private createReplaceRequests(
+    professionalData: ProfessionalResumeData,
+  ): GoogleReplaceRequest[] {
     const projects = this.generateProjectRequests(professionalData.projects);
+
+    console.log(professionalData);
 
     const requests = [
       ...projects,
       this.googleService.createReplaceRequestObject(
         this.googleDocTemplateFields.professionalTechnologies,
-        this.parseProfessionalTechnologies(professionalData.technologies),
+        professionalData.technologies,
       ),
       this.googleService.createReplaceRequestObject(
         this.googleDocTemplateFields.professionalName,
@@ -72,7 +95,7 @@ export class ResumeBuilderService {
       ),
       this.googleService.createReplaceRequestObject(
         this.googleDocTemplateFields.professionalHeadline,
-        professionalData.profile,
+        professionalData.headline,
       ),
       this.googleService.createReplaceRequestObject(
         this.googleDocTemplateFields.professionalAboutMe,
@@ -86,8 +109,8 @@ export class ResumeBuilderService {
 
     return requests;
   }
-  // TODO: projects will by typed after the professional data is retrieved from the database
-  private generateProjectRequests(projects: any) {
+
+  private generateProjectRequests(projects: ProjectResumeData[]) {
     const projectsArray = [];
 
     for (let i = 0; i < this.googleConf.googleDocTemplateMaxProjects; i++) {
@@ -100,9 +123,7 @@ export class ResumeBuilderService {
             this.googleDocTemplateFields.projectTitle,
             projectIndex,
           ),
-          project
-            ? project.title + this.googleDocTemplateFields.projectNewLine
-            : '',
+          project ? project.name : '',
         ),
         this.googleService.createReplaceRequestObject(
           this.replaceIndexString(
@@ -128,8 +149,30 @@ export class ResumeBuilderService {
             projectIndex,
           ),
           project
-            ? this.parseProjectTechnologies(project.technologies) +
-                this.googleDocTemplateFields.projectNewLine
+            ? project.technologies +
+                this.googleDocTemplateFields.projectNewLine.repeat(2)
+            : '',
+        ),
+        this.googleService.createReplaceRequestObject(
+          this.replaceIndexString(
+            this.googleDocTemplateFields.projectResponsibility,
+            projectIndex,
+          ),
+          project
+            ? ` / ${project.responsibility}${this.googleDocTemplateFields.projectNewLine}`
+            : '',
+        ),
+        this.googleService.createReplaceRequestObject(
+          this.replaceIndexString(
+            this.googleDocTemplateFields.projectDates,
+            projectIndex,
+          ),
+          project
+            ? this.parseProjectDates(
+                project.startDate,
+                project.endDate,
+                project.duration,
+              ) + this.googleDocTemplateFields.projectNewLine
             : '',
         ),
       ];
@@ -140,21 +183,23 @@ export class ResumeBuilderService {
     return projectsArray;
   }
 
-  private parseProfessionalTechnologies(technologies: string[]): string {
+  private parseProfessionalTechnologies(
+    technologies: TechnologyEntity[],
+  ): string {
     let parsedTechnologies = '';
 
-    technologies.forEach((technology) => {
-      parsedTechnologies += technology + '\n';
+    technologies?.forEach((technology) => {
+      parsedTechnologies += technology.name + '\n';
     });
 
     return parsedTechnologies;
   }
 
-  private parseProjectTechnologies(technologies: string[]): string {
+  private parseProjectTechnologies(technologies: TechnologyEntity[]): string {
     let parsedTechnologies = '';
 
-    technologies.forEach((technology) => {
-      parsedTechnologies += technology + ', ';
+    technologies?.forEach((technology) => {
+      parsedTechnologies += technology.name + ', ';
     });
 
     return parsedTechnologies;
@@ -165,5 +210,66 @@ export class ResumeBuilderService {
       this.googleDocTemplateFields.indexTextForReplace,
       index.toString(),
     );
+  }
+
+  private parseProjectDates(
+    startDate: Date,
+    endDate: Date,
+    duration: string,
+  ): string {
+    const start = format(startDate, 'MMMM yyyy');
+    const end = format(endDate, 'MMMM yyyy');
+
+    return `${start} - ${end} (${duration})`;
+  }
+
+  private createLevelString(level: number): string {
+    const maxLevel = 5;
+    const emptyStar = '☆';
+    const fullStar = '★';
+
+    let levelString = '';
+
+    for (let i = 0; i < level; i++) {
+      levelString += fullStar;
+    }
+
+    for (let i = 0; i < maxLevel - level; i++) {
+      levelString += emptyStar;
+    }
+
+    return levelString;
+  }
+
+  private createProfessionalResumeData(
+    professional: ProfessionalEntity,
+  ): ProfessionalResumeData {
+    const projects: ProjectResumeData[] = professional.projects.map(
+      (project) => {
+        return {
+          description: project.project.description,
+          duration: `${project.project.duration} months`,
+          name: project.project.name,
+          startDate: project.project.from,
+          endDate: project.project.to,
+          technologies: this.parseProjectTechnologies(
+            project.project.technologies,
+          ),
+          responsibility: project.responsibility,
+        };
+      },
+    );
+
+    return {
+      name: `${professional.firstName} ${professional.lastName}`,
+      headline: professional.headline,
+      email: professional.email,
+      aboutMe: professional.about,
+      englishLevel: this.createLevelString(professional.english),
+      projects: projects,
+      technologies: this.parseProfessionalTechnologies(
+        professional.technologies,
+      ),
+    };
   }
 }

@@ -49,9 +49,9 @@ export class GoogleService implements OnApplicationBootstrap {
     this.authClient = await auth.getClient();
   }
 
-  async getTemplateCopyId(professionalName: string): Promise<string> {
+  async getTemplateCopyId(documentName: string): Promise<string> {
     const copyTemplateRequest = {
-      name: professionalName,
+      name: documentName,
       parents: [this.googleConf.googleDriveFolderId],
     };
 
