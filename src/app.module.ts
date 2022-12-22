@@ -12,15 +12,14 @@ import { GoogleModule } from './modules/google/google.module';
 import { AdminsRepository } from 'src/repositories';
 import { ProjectsModule } from './projects/projects.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { SeedModule } from './modules/seed/seed.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([AdminEntity]),
     ConfigModule,
     TypeOrmModule.forRootAsync({
-      useFactory: async (
-        dbConfig: ConfigType<typeof databaseConfig>,
-      ): Promise<object> => ({
+      useFactory: (dbConfig: ConfigType<typeof databaseConfig>): object => ({
         type: dbConfig.client,
         host: dbConfig.host,
         port: dbConfig.port,
@@ -37,6 +36,7 @@ import { AuthModule } from './modules/auth/auth.module';
     ProjectsModule,
     ResumeBuilderModule,
     GoogleModule,
+    SeedModule,
   ],
   providers: [AppService, AdminsRepository],
 })
