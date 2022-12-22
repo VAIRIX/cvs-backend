@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ProjectsRepository } from 'src/repositories';
 import { ProjectsService } from '../projects.service';
 
-jest.mock('../../repositories/projects.repository');
+jest.mock('../../../repositories/projects.repository');
 
 describe('ProjectsService', () => {
   let service: ProjectsService;

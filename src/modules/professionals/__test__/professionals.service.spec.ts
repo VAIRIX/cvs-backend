@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ProfessionalsRepository } from 'src/repositories';
 import { ProfessionalsService } from '../professionals.service';
 
-jest.mock('../../repositories/professionals.repository');
+jest.mock('../../../repositories/professionals.repository');
 
 describe('ProfessionalsService', () => {
   let service: ProfessionalsService;

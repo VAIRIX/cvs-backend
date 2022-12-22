@@ -8,6 +8,8 @@ export type GoogleDocTemplateFields = {
   projectDescription: string;
   projectTechnologiesTitle: string;
   projectTechnologies: string;
+  projectResponsibility: string;
+  projectDates: string;
   projectNewLine: string;
   indexTextForReplace: string;
   projectTechnologiesTitleText: string;

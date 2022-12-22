@@ -4,23 +4,22 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { ConfigModule } from './config/config.module';
 import databaseConfig from './config/database.config';
-import { ProfessionalsModule } from './professionals/professionals.module';
-import { AuthModule } from './auth/auth.module';
+import { ProfessionalsModule } from './modules/professionals/professionals.module';
 import { AppService } from './app.service';
 import { AdminEntity } from './entities';
-import { ResumeBuilderModule } from './resume-builder/resume-builder.module';
-import { GoogleModule } from './google/google.module';
+import { ResumeBuilderModule } from './modules/resume-builder/resume-builder.module';
+import { GoogleModule } from './modules/google/google.module';
 import { AdminsRepository } from 'src/repositories';
-import { ProjectsModule } from './projects/projects.module';
+import { ProjectsModule } from './modules/projects/projects.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { SeedModule } from './modules/seed/seed.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([AdminEntity]),
     ConfigModule,
     TypeOrmModule.forRootAsync({
-      useFactory: async (
-        dbConfig: ConfigType<typeof databaseConfig>,
-      ): Promise<object> => ({
+      useFactory: (dbConfig: ConfigType<typeof databaseConfig>): object => ({
         type: dbConfig.client,
         host: dbConfig.host,
         port: dbConfig.port,
@@ -37,6 +36,7 @@ import { ProjectsModule } from './projects/projects.module';
     ProjectsModule,
     ResumeBuilderModule,
     GoogleModule,
+    SeedModule,
   ],
   providers: [AppService, AdminsRepository],
 })

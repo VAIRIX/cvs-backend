@@ -1,10 +1,10 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Req, Res } from '../dtos';
 import { compare } from 'src/utils/hash';
 import { plainToInstance } from 'class-transformer';
 import { AdminsRepository } from 'src/repositories';
 import { API_RESPONSE_MESSAGES } from 'src/constants/api-response-messages';
+import { Req, Res } from 'src/dtos';
 
 @Injectable()
 export class AuthService {
@@ -14,9 +14,9 @@ export class AuthService {
   ) {}
 
   async signIn(signInReqDto: Req.SignInReqDto): Promise<any> {
-    const user = await this.adminRepository.findByUsername(
-      signInReqDto.username,
-    );
+    const user = await this.adminRepository.findOneBy({
+      username: signInReqDto.username,
+    });
     const validPassword = await compare(signInReqDto.password, user?.password);
     if (user && validPassword) {
       const payload = { username: user.username, sub: user.id };

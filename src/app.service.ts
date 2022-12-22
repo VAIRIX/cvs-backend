@@ -13,9 +13,9 @@ export class AppService implements OnApplicationBootstrap {
   ) {}
 
   async onApplicationBootstrap() {
-    const admin = await this.adminRepository.findByUsername(
-      this.authConf.adminUsername,
-    );
+    const admin = await this.adminRepository.findOneBy({
+      username: this.authConf.adminUsername,
+    });
     if (!admin) {
       const hashPassword = await hash(this.authConf.adminPassword);
       await this.adminRepository.save({

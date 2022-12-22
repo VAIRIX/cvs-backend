@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from '../auth.service';
 import { AdminsRepository } from 'src/repositories';
-jest.mock('../../repositories/admins.repository');
+jest.mock('../../../repositories/admins.repository');
 
 describe('AuthService', () => {
   let service: AuthService;
