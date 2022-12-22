@@ -6,7 +6,9 @@ import { ProfessionalsRepository } from 'src/repositories';
 
 @Injectable()
 export class ProfessionalsService {
-  constructor(private professionalsRepository: ProfessionalsRepository) {}
+  constructor(
+    private readonly professionalsRepository: ProfessionalsRepository,
+  ) {}
 
   public async getProfessionals(
     professionalsFilterDto: Req.GetProfessionalsFilterDto,
@@ -33,10 +35,10 @@ export class ProfessionalsService {
   public async createProfessional(
     professional: Req.CreateProfessionalDto,
   ): Promise<Res.ProfessionalResDto> {
-    return plainToInstance(
-      Res.ProfessionalResDto,
-      this.professionalsRepository.createProfessional(professional),
-    );
+    const createdProfessional =
+      await this.professionalsRepository.createProfessional(professional);
+
+    return plainToInstance(Res.ProfessionalResDto, createdProfessional);
   }
 
   public async updateProfessional(

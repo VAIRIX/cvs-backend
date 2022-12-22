@@ -5,7 +5,7 @@ import { ProfessionalEntity } from '../entities/professional.entity';
 
 @Injectable()
 export class ProfessionalsRepository extends Repository<ProfessionalEntity> {
-  constructor(private dataSource: DataSource) {
+  constructor(private readonly dataSource: DataSource) {
     super(ProfessionalEntity, dataSource.createEntityManager());
   }
 
