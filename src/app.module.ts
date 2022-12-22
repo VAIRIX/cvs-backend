@@ -11,12 +11,12 @@ import { AdminEntity } from './entities';
 import { ResumeBuilderModule } from './resume-builder/resume-builder.module';
 import { GoogleModule } from './google/google.module';
 import { AdminsRepository } from 'src/repositories';
+import { ProjectsModule } from './projects/projects.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([AdminEntity]),
     ConfigModule,
-    ProfessionalsModule,
     TypeOrmModule.forRootAsync({
       useFactory: async (
         dbConfig: ConfigType<typeof databaseConfig>,
@@ -33,6 +33,8 @@ import { AdminsRepository } from 'src/repositories';
       inject: [databaseConfig.KEY],
     }),
     AuthModule,
+    ProfessionalsModule,
+    ProjectsModule,
     ResumeBuilderModule,
     GoogleModule,
   ],
