@@ -39,7 +39,7 @@ export const projectsSeed: Partial<ProjectEntity>[] = [
     The team was composed by two frontend engineers, one backend \
     engineer, and QA engineer. \
     We used Scrum as a methodology.',
-    duration: 8,
+    duration: '8',
     from: new Date(),
     to: new Date(),
   },
@@ -49,7 +49,7 @@ export const projectsSeed: Partial<ProjectEntity>[] = [
       'Worked as a frontend ReactJS developer on this project involving a file \
       management system, which included online forms and business flow \
       creation.',
-    duration: 8,
+    duration: '8',
     from: new Date(),
     to: new Date(),
   },
