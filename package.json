@@ -21,6 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prepare": "husky install",
     "precommit": "npm run cspell && npx lint-staged && pretty-quick --staged",
+    "preinstall": "node use_npm.js",
     "cspell": "cspell '**'"
   },
   "dependencies": {
