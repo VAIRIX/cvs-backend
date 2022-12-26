@@ -67,6 +67,10 @@ export class ResumeBuilderService {
         replaceRequests,
       );
 
+      await this.professionalsRepository.update(professional.id, {
+        resumeUrl: resumeUrl,
+      });
+
       return plainToInstance(Res.BuildResumeResDto, { resumeUrl });
     } catch (error) {
       this.logger.error(error);
