@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { compare } from 'src/utils/hash';
+import { compare } from 'src/utils';
 import { plainToInstance } from 'class-transformer';
 import { AdminsRepository } from 'src/repositories';
 import { API_RESPONSE_MESSAGES } from 'src/constants/api-response-messages';
@@ -17,6 +17,10 @@ export class AuthService {
     const user = await this.adminRepository.findOneBy({
       username: signInReqDto.username,
     });
+    if (!user)
+      throw new UnauthorizedException(
+        API_RESPONSE_MESSAGES.INVALID_CREDENTIALS,
+      );
     const validPassword = await compare(signInReqDto.password, user?.password);
     if (user && validPassword) {
       const payload = { username: user.username, sub: user.id };
