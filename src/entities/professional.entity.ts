@@ -24,6 +24,11 @@ export class ProfessionalEntity extends BaseEntity {
   @Column()
   about: string;
 
+  @Column({
+    nullable: true,
+  })
+  resumeUrl: string;
+
   @OneToMany(
     () => ProfessionalProjectsEntity,
     (professionalProjects) => professionalProjects.professional,

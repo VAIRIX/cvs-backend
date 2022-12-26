@@ -22,4 +22,8 @@ export class ProfessionalResDto extends BaseResDto {
   @ApiProperty({ type: String })
   @Expose()
   email: string;
+
+  @ApiProperty({ type: String })
+  @Expose()
+  resumeUrl: string;
 }
