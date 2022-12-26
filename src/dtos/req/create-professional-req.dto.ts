@@ -8,21 +8,18 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-import {
-  DTO_PROFESSIONAL_ABOUT_LENGTH,
-  DTO_PROFESSIONAL_NAME_LENGTH,
-} from 'src/constants';
+import { DTO_VALIDATIONS } from 'src/constants';
 
 export class CreateProfessionalDto {
   @ApiProperty({ type: String })
   @IsNotEmpty()
-  @MaxLength(DTO_PROFESSIONAL_NAME_LENGTH)
+  @MaxLength(DTO_VALIDATIONS.PROFESSIONAL_NAME_LENGTH)
   @IsString()
   firstName: string;
 
   @ApiProperty({ type: String })
   @IsNotEmpty()
-  @MaxLength(DTO_PROFESSIONAL_NAME_LENGTH)
+  @MaxLength(DTO_VALIDATIONS.PROFESSIONAL_NAME_LENGTH)
   @IsString()
   lastName: string;
 
@@ -35,7 +32,7 @@ export class CreateProfessionalDto {
 
   @ApiProperty({ type: String })
   @IsNotEmpty()
-  @MaxLength(DTO_PROFESSIONAL_ABOUT_LENGTH)
+  @MaxLength(DTO_VALIDATIONS.PROFESSIONAL_ABOUT_LENGTH)
   about: string;
 
   @ApiProperty({ type: String })
