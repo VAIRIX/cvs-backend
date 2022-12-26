@@ -1,10 +1,4 @@
-import {
-  Inject,
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import googleConfig from 'src/config/google.config';
 import { ConfigType } from '@nestjs/config';
 import {
@@ -14,7 +8,6 @@ import {
   ProjectResumeData,
 } from 'src/types/';
 import { Req, Res } from 'src/dtos';
-import { API_RESPONSE_MESSAGES } from 'src/constants/api-response-messages';
 import { GoogleService } from 'src/modules/google/google.service';
 import { plainToInstance } from 'class-transformer';
 import { ProfessionalsRepository } from 'src/repositories';
@@ -23,8 +16,6 @@ import { format } from 'date-fns';
 
 @Injectable()
 export class ResumeBuilderService {
-  private readonly logger = new Logger(ResumeBuilderService.name);
-
   private googleDocTemplateFields: GoogleDocTemplateFields;
 
   constructor(
@@ -36,56 +27,41 @@ export class ResumeBuilderService {
     this.googleDocTemplateFields = this.googleConf.googleDocTemplateFields;
   }
 
-  async generateResume(
-    buildResumeReqDto: Req.BuildResumeReqDto,
-  ): Promise<Res.BuildResumeResDto> {
-    const professional = await this.professionalsRepository.findOne({
+  async generateResume(buildResumeReqDto: Req.BuildResumeReqDto): Promise<any> {
+    const professional = await this.professionalsRepository.findOneOrFail({
       where: { id: buildResumeReqDto.professionalId },
-      relations: [
-        'projects',
-        'projects.project',
-        'technologies',
-        'projects.project.technologies',
-      ],
+      relations: {
+        projects: {
+          project: {
+            technologies: true,
+          },
+        },
+        technologies: true,
+      },
     });
-
-    if (!professional) {
-      throw new NotFoundException(API_RESPONSE_MESSAGES.PROFESSIONAL_NOT_FOUND);
-    }
 
     const professionalResumeData =
       this.createProfessionalResumeData(professional);
-    try {
-      const templateId = await this.googleService.getTemplateCopyId(
-        professionalResumeData.name,
-      );
-      const replaceRequests = this.createReplaceRequests(
-        professionalResumeData,
-      );
-      const resumeUrl = await this.googleService.fillTemplate(
-        templateId,
-        replaceRequests,
-      );
+    const templateId = await this.googleService.getTemplateCopyId(
+      professionalResumeData.name,
+    );
+    const replaceRequests = this.createReplaceRequests(professionalResumeData);
+    const resumeUrl = await this.googleService.fillTemplate(
+      templateId,
+      replaceRequests,
+    );
 
-      await this.professionalsRepository.update(professional.id, {
-        resumeUrl: resumeUrl,
-      });
+    await this.professionalsRepository.update(professional.id, {
+      resumeUrl: resumeUrl,
+    });
 
-      return plainToInstance(Res.BuildResumeResDto, { resumeUrl });
-    } catch (error) {
-      this.logger.error(error);
-      throw new InternalServerErrorException(
-        API_RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR,
-      );
-    }
+    return plainToInstance(Res.BuildResumeResDto, { resumeUrl });
   }
 
   private createReplaceRequests(
     professionalData: ProfessionalResumeData,
   ): GoogleReplaceRequest[] {
     const projects = this.generateProjectRequests(professionalData.projects);
-
-    console.log(professionalData);
 
     const requests = [
       ...projects,

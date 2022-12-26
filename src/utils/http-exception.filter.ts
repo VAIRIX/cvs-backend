@@ -7,6 +7,8 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { API_RESPONSE_MESSAGES } from 'src/constants/api-response-messages';
+import { EntityNotFoundError, TypeORMError } from 'typeorm';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -16,7 +18,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
-    console.log(exception);
     if (exception instanceof HttpException) {
       const status = exception.getStatus();
       response.status(status).json({
@@ -27,6 +28,15 @@ export class HttpExceptionFilter implements ExceptionFilter {
           (exception?.getResponse() as { message: string })?.message ??
           exception.message,
       });
+    } else if (exception instanceof TypeORMError) {
+      const { message, statusCode } = this.handleTypeORMError(exception);
+
+      response.status(statusCode).json({
+        statusCode,
+        message,
+        timestamp: new Date().toISOString(),
+        path: request.url,
+      });
     } else {
       this.logger.error(exception);
       response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
@@ -34,6 +44,24 @@ export class HttpExceptionFilter implements ExceptionFilter {
         timestamp: new Date().toISOString(),
         path: request.url,
       });
+    }
+  }
+
+  private handleTypeORMError(exception: TypeORMError): {
+    message: string;
+    statusCode: number;
+  } {
+    switch (exception.constructor) {
+      case EntityNotFoundError:
+        return {
+          statusCode: HttpStatus.NOT_FOUND,
+          message: API_RESPONSE_MESSAGES.RESOURCE_NOT_FOUND,
+        };
+      default:
+        return {
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: API_RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR,
+        };
     }
   }
 }
