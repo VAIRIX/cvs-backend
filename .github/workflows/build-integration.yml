@@ -19,39 +19,39 @@ jobs:
           cache: 'npm'
 
       - name: Install npm dependencies
-        run: npm ci
+        run: npm run ci
 
       - name: Lint code
-        run: npm lint
+        run: npm run lint
 
-  build:
-    runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_DB: cv
-          POSTGRES_PASSWORD: postgres
-        ports: ['5432:5432']
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+  # build:
+  #   runs-on: ubuntu-latest
+  #   services:
+  #     postgres:
+  #       image: postgres:15
+  #       env:
+  #         POSTGRES_USER: postgres
+  #         POSTGRES_DB: cv
+  #         POSTGRES_PASSWORD: postgres
+  #       ports: ['5432:5432']
+  #       options: >-
+  #         --health-cmd pg_isready
+  #         --health-interval 10s
+  #         --health-timeout 5s
+  #         --health-retries 5
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
 
-      - name: Setup NodeJS
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18.12.1
-          cache: 'npm'
+  #     - name: Setup NodeJS
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 18.12.1
+  #         cache: 'npm'
 
-      - name: Install npm dependencies
-        run: npm ci
+  #     - name: Install npm dependencies
+  #       run: npm ci
 
-      - name: Run tests
-        run: npm test
+  #     - name: Run tests
+  #       run: npm test
