@@ -36,9 +36,6 @@ export class ProfessionalEntity extends BaseEntity {
   })
   resumeUrl: string;
 
-  @DeleteDateColumn()
-  public deletedAt: Date;
-
   @OneToMany(
     () => ProfessionalProjectsEntity,
     (professionalProjects) => professionalProjects.professional,

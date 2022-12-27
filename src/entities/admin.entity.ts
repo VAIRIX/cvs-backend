@@ -1,4 +1,4 @@
-import { Column, DeleteDateColumn, Entity } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { BaseEntity } from './base.entity';
 
 @Entity({ name: 'admins' })
@@ -15,7 +15,4 @@ export class AdminEntity extends BaseEntity {
     length: 250,
   })
   password: string;
-
-  @DeleteDateColumn()
-  public deletedAt: Date;
 }
