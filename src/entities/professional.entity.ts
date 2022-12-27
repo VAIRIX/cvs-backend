@@ -1,4 +1,11 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
+import {
+  Column,
+  DeleteDateColumn,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+} from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { MethodologyEntity } from './methodology.entity';
 import { ProfessionalProjectsEntity } from './professional-projects.entity';
@@ -28,6 +35,9 @@ export class ProfessionalEntity extends BaseEntity {
     nullable: true,
   })
   resumeUrl: string;
+
+  @DeleteDateColumn()
+  public deletedAt: Date;
 
   @OneToMany(
     () => ProfessionalProjectsEntity,

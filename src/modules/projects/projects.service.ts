@@ -48,7 +48,7 @@ export class ProjectsService {
   }
 
   public async deleteProject(id: string): Promise<void> {
-    const result = await this.projectsRepository.delete(id);
+    const result = await this.projectsRepository.softDelete(id);
 
     if (result.affected === 0) {
       throw new NotFoundException(`Project with ID "${id}" was not found`);

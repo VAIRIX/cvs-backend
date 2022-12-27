@@ -53,7 +53,7 @@ export class ProfessionalsService {
   }
 
   public async deleteProfessional(id: string): Promise<void> {
-    const result = await this.professionalsRepository.delete(id);
+    const result = await this.professionalsRepository.softDelete(id);
 
     if (result.affected === 0) {
       throw new NotFoundException(`Professional with ID "${id}" was not found`);
