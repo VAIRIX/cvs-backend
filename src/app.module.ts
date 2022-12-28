@@ -13,6 +13,7 @@ import { AdminsRepository } from 'src/repositories';
 import { ProjectsModule } from './modules/projects/projects.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { SeedModule } from './modules/seed/seed.module';
+import { MethodologiesModule } from './modules/methodologies/methodologies.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { SeedModule } from './modules/seed/seed.module';
     AuthModule,
     ProfessionalsModule,
     ProjectsModule,
+    MethodologiesModule,
     ResumeBuilderModule,
     GoogleModule,
     SeedModule,
