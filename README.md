@@ -22,3 +22,5 @@ Run the following command to build and start all the services defined in your do
 `$ docker-compose --env-file src/config/env/development.env up`
 
 This command will build the images for each service, if they do not already exist, and then start the services. The output of each service will be displayed in the terminal.
+
+Since Docker is building and running the development environment you don't need to run `$ npm install` in the project directory.
