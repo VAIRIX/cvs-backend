@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { IsDateAfter } from 'src/validators';
+import { IsDateAfter } from '../validations/is-date-after';
 
 export class CreateProjectDto {
   @ApiProperty({ type: String })

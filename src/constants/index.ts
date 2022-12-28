@@ -1,2 +1,2 @@
-export const DTO_PROFESSIONAL_NAME_LENGTH = 24;
-export const DTO_PROFESSIONAL_ABOUT_LENGTH = 512;
+export * from './api-response-messages';
+export * from './dto-validations';

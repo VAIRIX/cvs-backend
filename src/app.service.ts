@@ -2,7 +2,7 @@ import { Inject, Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import authConfig from './config/auth.config';
 import { AdminsRepository } from 'src/repositories';
-import { hash } from './utils/hash';
+import { hash } from './utils';
 
 @Injectable()
 export class AppService implements OnApplicationBootstrap {

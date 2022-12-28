@@ -4,3 +4,4 @@ export * from './create-project-req.dto';
 export * from './get-professionals-filter-req.dto';
 export * from './get-projects-filter-req.dto';
 export * from './build-resume-req.dto';
+export * from './add-professional-projects-req.dto';
