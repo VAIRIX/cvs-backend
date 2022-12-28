@@ -18,7 +18,7 @@
     "./commitlint.config.js",
     "./cspell.json",
     "./pgdata/**",
-    "./src/config/env/google_cloud_credentials.json",
+    "./google_cloud_credentials.json",
     "./Dockerfile",
     "./Dockerfile.dev"
   ]

@@ -9,9 +9,6 @@ import googleConfig from './google.config';
   imports: [
     NestConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `${process.cwd()}/src/config/env/${
-        process.env.NODE_ENV
-      }.env`,
       load: [databaseConfig, authConfig, googleConfig],
       validationSchema: Joi.object({
         APP_PORT: Joi.number().default(3000),
