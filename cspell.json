@@ -3,6 +3,7 @@
   "words": ["dbname", "dtos", "googleauth", "nestjs", "pgdata", "typeorm"],
   "language": "en",
   "ignorePaths": [
+    "./README.md",
     "**/node_modules/**",
     "**/dist/**",
     "**/.git/**",
@@ -17,6 +18,8 @@
     "./commitlint.config.js",
     "./cspell.json",
     "./pgdata/**",
-    "./google_cloud_credentials.json"
+    "./google_cloud_credentials.json",
+    "./Dockerfile",
+    "./Dockerfile.dev"
   ]
 }
