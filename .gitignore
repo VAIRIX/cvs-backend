@@ -40,3 +40,4 @@ src/config/env/google_cloud_credentials.json
 
 **/*.env
 !src/config/env/example.env
+
