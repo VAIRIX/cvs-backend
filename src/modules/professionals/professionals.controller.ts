@@ -10,8 +10,14 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiExtraModels,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Req, Res } from 'src/dtos';
+import { ApiPaginatedResponse } from 'src/utils/api-paginated-response';
 import { ProfessionalsService } from './professionals.service';
 
 @Controller('professionals')
@@ -22,10 +28,11 @@ export class ProfessionalsController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({ type: Res.ProfessionalResDto, isArray: true })
+  @ApiPaginatedResponse(Res.ProfessionalResDto)
+  @ApiExtraModels(Res.PaginatedListDto)
   public getProfessionals(
     @Query() professionalsFilterDto: Req.GetProfessionalsFilterDto,
-  ): Promise<Res.ProfessionalResDto[]> {
+  ): Promise<Res.PaginatedListDto<Res.ProfessionalResDto>> {
     return this.professionalsService.getProfessionals(professionalsFilterDto);
   }
 
@@ -57,8 +64,8 @@ export class ProfessionalsController {
     return this.professionalsService.updateProfessional(id, professional);
   }
 
-  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   public delete(@Param('id') id: string): Promise<void> {
     return this.professionalsService.deleteProfessional(id);
   }
