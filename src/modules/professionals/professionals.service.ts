@@ -51,7 +51,7 @@ export class ProfessionalsService {
         this.professionalsRepository.create(professional);
       const createdProfessional = await entityManager.save(professionalEntity);
 
-      if (professional.projects.length > 0) {
+      if (professional.projects?.length > 0) {
         const projects =
           this.professionalsProjectRepository.createProfessionalProjectsEntities(
             professionalEntity.id,

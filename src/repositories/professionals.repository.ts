@@ -33,14 +33,4 @@ export class ProfessionalsRepository extends Repository<ProfessionalEntity> {
 
     return professionals;
   }
-
-  public async createProfessional(
-    professional: Req.CreateProfessionalDto,
-  ): Promise<ProfessionalEntity> {
-    const professionalObject = this.create(professional);
-
-    await this.save(professionalObject);
-
-    return professionalObject;
-  }
 }
