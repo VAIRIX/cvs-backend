@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose, Type } from 'class-transformer';
+import { Type } from 'class-transformer';
 import {
   IsEmail,
+  IsInt,
   IsNotEmpty,
-  IsNumber,
   IsString,
   Max,
   MaxLength,
@@ -27,7 +27,7 @@ export class CreateProfessionalDto {
 
   @ApiProperty({ type: Number, default: 1 })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   @Min(1)
   @Max(5)
   english: number;
@@ -35,6 +35,7 @@ export class CreateProfessionalDto {
   @ApiProperty({ type: String })
   @IsNotEmpty()
   @MaxLength(DTO_VALIDATIONS.PROFESSIONAL_ABOUT_LENGTH)
+  @IsString()
   about: string;
 
   @ApiProperty({ type: String, default: 'example@example.com' })
@@ -44,10 +45,10 @@ export class CreateProfessionalDto {
 
   @ApiProperty({ type: String })
   @IsNotEmpty()
+  @IsString()
   headline: string;
 
   @ApiProperty({ type: AddProfessionalProjectsReqDto, isArray: true })
   @Type(() => AddProfessionalProjectsReqDto)
-  @Expose()
   projects: AddProfessionalProjectsReqDto[];
 }

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsInt, IsOptional, IsString } from 'class-validator';
 
 export class GetProfessionalsFilterDto {
   @ApiProperty({ type: String, required: false })
@@ -9,11 +9,11 @@ export class GetProfessionalsFilterDto {
 
   @ApiProperty({ type: Number, required: false })
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   minEnglish: number;
 
   @ApiProperty({ type: Number, required: false })
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   maxEnglish: number;
 }
