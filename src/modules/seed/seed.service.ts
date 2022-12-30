@@ -1,5 +1,5 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
-import { ProfessionalProjectsEntity } from 'src/entities';
+import { ProfessionalsProjectsEntity } from 'src/entities';
 import {
   ProfessionalsRepository,
   ProjectsRepository,
@@ -46,7 +46,7 @@ export class SeedService implements OnApplicationBootstrap {
       technologies: technologiesSeed,
     });
 
-    const professionalProjects: Partial<ProfessionalProjectsEntity>[] = [];
+    const professionalProjects: Partial<ProfessionalsProjectsEntity>[] = [];
 
     for (const project of projects) {
       professionalProjects.push({

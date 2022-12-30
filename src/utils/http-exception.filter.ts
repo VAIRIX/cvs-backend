@@ -30,7 +30,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       });
     } else if (exception instanceof TypeORMError) {
       const { message, statusCode } = this.handleTypeORMError(exception);
-
+      console.log(exception);
       response.status(statusCode).json({
         statusCode,
         message,

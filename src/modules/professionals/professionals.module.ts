@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProfessionalEntity, ProfessionalProjectsEntity } from 'src/entities';
+import { ProfessionalEntity, ProfessionalsProjectsEntity } from 'src/entities';
 import {
   ProfessionalsProjectsRepository,
   ProfessionalsRepository,
@@ -10,7 +10,7 @@ import { ProfessionalsService } from './professionals.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ProfessionalEntity, ProfessionalProjectsEntity]),
+    TypeOrmModule.forFeature([ProfessionalEntity, ProfessionalsProjectsEntity]),
   ],
   controllers: [ProfessionalsController],
   providers: [

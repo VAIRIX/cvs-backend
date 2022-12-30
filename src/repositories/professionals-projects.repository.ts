@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Req } from 'src/dtos';
-import { ProfessionalProjectsEntity } from 'src/entities';
+import { ProfessionalsProjectsEntity } from 'src/entities';
 import { DataSource, Repository } from 'typeorm';
 
 @Injectable()
-export class ProfessionalsProjectsRepository extends Repository<ProfessionalProjectsEntity> {
+export class ProfessionalsProjectsRepository extends Repository<ProfessionalsProjectsEntity> {
   constructor(private dataSource: DataSource) {
-    super(ProfessionalProjectsEntity, dataSource.createEntityManager());
+    super(ProfessionalsProjectsEntity, dataSource.createEntityManager());
   }
 
   public async updateProfessionalProjects(
@@ -30,7 +30,7 @@ export class ProfessionalsProjectsRepository extends Repository<ProfessionalProj
   public createProfessionalProjectsEntities(
     professionalId: string,
     projects: Req.AddProfessionalProjectsReqDto[],
-  ): ProfessionalProjectsEntity[] {
+  ): ProfessionalsProjectsEntity[] {
     const professionalProjectsEntities = projects.map((project) =>
       this.create({
         professionalId,
@@ -40,5 +40,38 @@ export class ProfessionalsProjectsRepository extends Repository<ProfessionalProj
     );
 
     return professionalProjectsEntities;
+  }
+
+  public createProjectProfessionalsEntities(
+    projectId: string,
+    professionals: Req.AddProjectProfessionalsReqDto[],
+  ): ProfessionalsProjectsEntity[] {
+    const professionalProjectsEntities = professionals.map((professional) =>
+      this.create({
+        projectId,
+        professionalId: professional.professionalId,
+        responsibility: professional.responsibility,
+      }),
+    );
+
+    return professionalProjectsEntities;
+  }
+
+  public async updateProjectProfessionals(
+    projectId: string,
+    professionals: Req.AddProjectProfessionalsReqDto[],
+  ) {
+    return this.dataSource.transaction(async (entityManager) => {
+      await entityManager.delete(this.metadata.tableName, {
+        projectId,
+      });
+
+      const projectProfessionals = this.createProjectProfessionalsEntities(
+        projectId,
+        professionals,
+      );
+
+      return entityManager.save(projectProfessionals);
+    });
   }
 }

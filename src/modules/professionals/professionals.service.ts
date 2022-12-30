@@ -48,23 +48,28 @@ export class ProfessionalsService {
   public async createProfessional(
     professional: Req.CreateProfessionalDto,
   ): Promise<Res.ProfessionalResDto> {
-    return this.dataSource.transaction(async (entityManager) => {
-      const professionalEntity =
-        this.professionalsRepository.create(professional);
-      const createdProfessional = await entityManager.save(professionalEntity);
+    const createdProfessional = await this.dataSource.transaction(
+      async (entityManager) => {
+        const professionalEntity =
+          this.professionalsRepository.create(professional);
+        const createdProfessional = await entityManager.save(
+          professionalEntity,
+        );
 
-      if (professional.projects?.length > 0) {
-        const projects =
-          this.professionalsProjectRepository.createProfessionalProjectsEntities(
-            professionalEntity.id,
-            professional.projects,
-          );
+        if (professional.projects?.length > 0) {
+          const projects =
+            this.professionalsProjectRepository.createProfessionalProjectsEntities(
+              professionalEntity.id,
+              professional.projects,
+            );
 
-        await entityManager.save(projects);
-      }
+          await entityManager.save(projects);
+        }
 
-      return plainToInstance(Res.ProfessionalResDto, createdProfessional);
-    });
+        return createdProfessional;
+      },
+    );
+    return this.getProfessionalById(createdProfessional.id);
   }
 
   public async updateProfessional(
