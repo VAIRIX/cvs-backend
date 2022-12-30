@@ -6,6 +6,7 @@ import {
   ProfessionalsRepository,
   ProfessionalsProjectsRepository,
 } from 'src/repositories';
+import { helperCreatePaginatedResponse } from 'src/utils/api-paginated-response';
 import { DataSource } from 'typeorm';
 
 @Injectable()
@@ -18,13 +19,14 @@ export class ProfessionalsService {
 
   public async getProfessionals(
     professionalsFilterDto: Req.GetProfessionalsFilterDto,
-  ): Promise<Res.ProfessionalResDto[]> {
+  ): Promise<Res.PaginatedListDto<Res.ProfessionalResDto>> {
     const professionals = await this.professionalsRepository.getProfessionals(
       professionalsFilterDto,
     );
 
-    return professionals.map((professional) =>
-      plainToInstance(Res.ProfessionalResDto, professional),
+    return helperCreatePaginatedResponse<Res.ProfessionalResDto>(
+      Res.ProfessionalResDto,
+      professionals,
     );
   }
 

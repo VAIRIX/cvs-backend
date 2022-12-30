@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Req } from 'src/dtos';
+import { PaginatedResult } from 'src/types';
 import { DataSource, Repository } from 'typeorm';
 import { ProfessionalEntity } from '../entities/professional.entity';
 
@@ -11,8 +12,8 @@ export class ProfessionalsRepository extends Repository<ProfessionalEntity> {
 
   public async getProfessionals(
     filterDto: Req.GetProfessionalsFilterDto,
-  ): Promise<ProfessionalEntity[]> {
-    const { search, minEnglish, maxEnglish } = filterDto;
+  ): Promise<PaginatedResult<ProfessionalEntity>> {
+    const { search, minEnglish, maxEnglish, pageSize, pageNumber } = filterDto;
 
     const query = this.createQueryBuilder('professional');
 
@@ -29,8 +30,18 @@ export class ProfessionalsRepository extends Repository<ProfessionalEntity> {
     if (maxEnglish)
       query.andWhere('professional.english =< :maxEnglish', { maxEnglish });
 
+    query.take(pageSize).skip(pageNumber * pageSize);
+
+    const total = await query.getCount();
+
     const professionals = await query.getMany();
 
-    return professionals;
+    return {
+      items: professionals,
+      total: total,
+      pageSize: pageSize,
+      page: pageNumber,
+      totalPages: Math.ceil(total / pageSize),
+    };
   }
 }
