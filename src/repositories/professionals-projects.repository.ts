@@ -13,7 +13,7 @@ export class ProfessionalsProjectsRepository extends Repository<ProfessionalsPro
     professionalId: string,
     projects: Req.AddProfessionalProjectsReqDto[],
   ) {
-    return this.dataSource.transaction(async (entityManager) => {
+    return await this.dataSource.transaction(async (entityManager) => {
       await entityManager.delete(this.metadata.tableName, {
         professionalId,
       });
@@ -23,7 +23,7 @@ export class ProfessionalsProjectsRepository extends Repository<ProfessionalsPro
         projects,
       );
 
-      return entityManager.save(professionalProjects);
+      return await entityManager.save(professionalProjects);
     });
   }
 
@@ -61,7 +61,7 @@ export class ProfessionalsProjectsRepository extends Repository<ProfessionalsPro
     projectId: string,
     professionals: Req.AddProjectProfessionalsReqDto[],
   ) {
-    return this.dataSource.transaction(async (entityManager) => {
+    return await this.dataSource.transaction(async (entityManager) => {
       await entityManager.delete(this.metadata.tableName, {
         projectId,
       });
@@ -71,7 +71,7 @@ export class ProfessionalsProjectsRepository extends Repository<ProfessionalsPro
         professionals,
       );
 
-      return entityManager.save(projectProfessionals);
+      return await entityManager.save(projectProfessionals);
     });
   }
 }

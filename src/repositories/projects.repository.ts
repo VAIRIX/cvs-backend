@@ -30,14 +30,4 @@ export class ProjectsRepository extends Repository<ProjectEntity> {
 
     return projects;
   }
-
-  public async createProject(
-    project: Req.CreateProjectDto,
-  ): Promise<ProjectEntity> {
-    const projectObject = this.create(project);
-
-    await this.save(projectObject);
-
-    return projectObject;
-  }
 }
