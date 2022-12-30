@@ -28,6 +28,10 @@ export class ProfessionalResDto extends BaseResDto {
   @Expose()
   resumeUrl: string;
 
+  @ApiProperty({ type: String })
+  @Expose()
+  headline: string;
+
   @ApiProperty({ type: ProfessionalProjectsResDto })
   @Type(() => ProfessionalProjectsResDto)
   @Expose()
