@@ -1,8 +1,10 @@
 import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 import { BaseEntity } from './base.entity';
-import { MethodologyEntity } from './methodology.entity';
-import { ProfessionalsProjectsEntity } from './index';
-import { TechnologyEntity } from './technology.entity';
+import {
+  ProfessionalsProjectsEntity,
+  TechnologyEntity,
+  MethodologyEntity,
+} from './';
 
 @Entity({ name: 'professionals' })
 export class ProfessionalEntity extends BaseEntity {
