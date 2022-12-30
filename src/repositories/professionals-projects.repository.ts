@@ -11,7 +11,7 @@ export class ProfessionalsProjectsRepository extends Repository<ProfessionalsPro
 
   public async updateProfessionalProjects(
     professionalId: string,
-    projects: Req.AddProfessionalProjectsReqDto[],
+    projects: Req.AddProjectsToProfessionalReqDto[],
   ) {
     return await this.dataSource.transaction(async (entityManager) => {
       await entityManager.delete(this.metadata.tableName, {
@@ -29,7 +29,7 @@ export class ProfessionalsProjectsRepository extends Repository<ProfessionalsPro
 
   public createProfessionalProjectsEntities(
     professionalId: string,
-    projects: Req.AddProfessionalProjectsReqDto[],
+    projects: Req.AddProjectsToProfessionalReqDto[],
   ): ProfessionalsProjectsEntity[] {
     const professionalProjectsEntities = projects.map((project) =>
       this.create({
@@ -44,7 +44,7 @@ export class ProfessionalsProjectsRepository extends Repository<ProfessionalsPro
 
   public createProjectProfessionalsEntities(
     projectId: string,
-    professionals: Req.AddProjectProfessionalsReqDto[],
+    professionals: Req.AddProfessionalsToProjectReqDto[],
   ): ProfessionalsProjectsEntity[] {
     const professionalProjectsEntities = professionals.map((professional) =>
       this.create({
@@ -59,7 +59,7 @@ export class ProfessionalsProjectsRepository extends Repository<ProfessionalsPro
 
   public async updateProjectProfessionals(
     projectId: string,
-    professionals: Req.AddProjectProfessionalsReqDto[],
+    professionals: Req.AddProfessionalsToProjectReqDto[],
   ) {
     return await this.dataSource.transaction(async (entityManager) => {
       await entityManager.delete(this.metadata.tableName, {

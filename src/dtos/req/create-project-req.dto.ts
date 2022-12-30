@@ -2,10 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { IsDateAfter } from '../validations/is-date-after';
-import {
-  AddProfessionalProjectsReqDto,
-  AddProjectProfessionalsReqDto,
-} from './add-professionals-projects-req.dto';
+import { AddProfessionalsToProjectReqDto } from './add-professionals-projects-req.dto';
 
 export class CreateProjectDto {
   @ApiProperty({ type: String })
@@ -37,11 +34,11 @@ export class CreateProjectDto {
   description: string;
 
   @ApiProperty({
-    type: AddProfessionalProjectsReqDto,
+    type: AddProfessionalsToProjectReqDto,
     isArray: true,
     required: false,
   })
-  @Type(() => AddProfessionalProjectsReqDto)
+  @Type(() => AddProfessionalsToProjectReqDto)
   @IsOptional()
-  professionals: AddProjectProfessionalsReqDto[];
+  professionals: AddProfessionalsToProjectReqDto[];
 }

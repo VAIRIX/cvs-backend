@@ -7,13 +7,13 @@ class BaseProfessionalProjectsReqDto {
   responsibility: string;
 }
 
-export class AddProfessionalProjectsReqDto extends BaseProfessionalProjectsReqDto {
+export class AddProjectsToProfessionalReqDto extends BaseProfessionalProjectsReqDto {
   @ApiProperty({ type: String })
   @Expose()
   projectId: string;
 }
 
-export class AddProjectProfessionalsReqDto extends BaseProfessionalProjectsReqDto {
+export class AddProfessionalsToProjectReqDto extends BaseProfessionalProjectsReqDto {
   @ApiProperty({ type: String })
   @Expose()
   professionalId: string;

@@ -11,7 +11,7 @@ import {
   Min,
 } from 'class-validator';
 import { DTO_VALIDATIONS } from 'src/constants';
-import { AddProfessionalProjectsReqDto } from './add-professionals-projects-req.dto';
+import { AddProjectsToProfessionalReqDto } from './add-professionals-projects-req.dto';
 
 export class CreateProfessionalDto {
   @ApiProperty({ type: String })
@@ -50,11 +50,11 @@ export class CreateProfessionalDto {
   headline: string;
 
   @ApiProperty({
-    type: AddProfessionalProjectsReqDto,
+    type: AddProjectsToProfessionalReqDto,
     isArray: true,
     required: false,
   })
-  @Type(() => AddProfessionalProjectsReqDto)
+  @Type(() => AddProjectsToProfessionalReqDto)
   @IsOptional()
-  projects: AddProfessionalProjectsReqDto[];
+  projects: AddProjectsToProfessionalReqDto[];
 }
