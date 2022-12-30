@@ -4,13 +4,14 @@ import {
   IsEmail,
   IsInt,
   IsNotEmpty,
+  IsOptional,
   IsString,
   Max,
   MaxLength,
   Min,
 } from 'class-validator';
 import { DTO_VALIDATIONS } from 'src/constants';
-import { AddProfessionalProjectsReqDto } from './add-professional-projects-req.dto';
+import { AddProjectsToProfessionalReqDto } from './add-professionals-projects-req.dto';
 
 export class CreateProfessionalDto {
   @ApiProperty({ type: String })
@@ -48,7 +49,12 @@ export class CreateProfessionalDto {
   @IsString()
   headline: string;
 
-  @ApiProperty({ type: AddProfessionalProjectsReqDto, isArray: true })
-  @Type(() => AddProfessionalProjectsReqDto)
-  projects: AddProfessionalProjectsReqDto[];
+  @ApiProperty({
+    type: AddProjectsToProfessionalReqDto,
+    isArray: true,
+    required: false,
+  })
+  @Type(() => AddProjectsToProfessionalReqDto)
+  @IsOptional()
+  projects: AddProjectsToProfessionalReqDto[];
 }

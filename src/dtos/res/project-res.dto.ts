@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
+import { ProjectProfessionalsResDto } from '.';
 import { BaseResDto } from './base-res.dto';
 
 export class ProjectResDto extends BaseResDto {
@@ -22,4 +23,9 @@ export class ProjectResDto extends BaseResDto {
   @ApiProperty({ type: String })
   @Expose()
   description: string;
+
+  @ApiProperty({ type: ProjectProfessionalsResDto })
+  @Type(() => ProjectProfessionalsResDto)
+  @Expose()
+  professionals: ProjectProfessionalsResDto[];
 }

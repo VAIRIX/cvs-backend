@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SeedService } from './seed.service';
 import {
   ProfessionalEntity,
-  ProfessionalProjectsEntity,
+  ProfessionalsProjectsEntity,
   ProjectEntity,
   TechnologyEntity,
 } from 'src/entities';
@@ -20,7 +20,7 @@ import {
     TypeOrmModule.forFeature([
       ProfessionalEntity,
       ProjectEntity,
-      ProfessionalProjectsEntity,
+      ProfessionalsProjectsEntity,
       TechnologyEntity,
     ]),
   ],

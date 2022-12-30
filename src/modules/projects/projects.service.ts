@@ -2,11 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common/exceptions';
 import { plainToInstance } from 'class-transformer';
 import { Req, Res } from 'src/dtos';
-import { ProjectsRepository } from 'src/repositories';
+import {
+  ProfessionalsProjectsRepository,
+  ProjectsRepository,
+} from 'src/repositories';
+import { DataSource } from 'typeorm';
 
 @Injectable()
 export class ProjectsService {
-  constructor(private readonly projectsRepository: ProjectsRepository) {}
+  constructor(
+    private readonly projectsRepository: ProjectsRepository,
+    private readonly professionalsProjectRepository: ProfessionalsProjectsRepository,
+    private readonly dataSource: DataSource,
+  ) {}
 
   public async getProjects(
     projectsFilterDto: Req.GetProjectsFilterDto,
@@ -21,8 +29,9 @@ export class ProjectsService {
   }
 
   public async getProjectById(id: string): Promise<Res.ProjectResDto> {
-    const project = await this.projectsRepository.findOneByOrFail({
-      id,
+    const project = await this.projectsRepository.findOneOrFail({
+      where: { id },
+      relations: { professionals: { professional: true } },
     });
 
     return plainToInstance(Res.ProjectResDto, project);
@@ -31,16 +40,39 @@ export class ProjectsService {
   public async createProject(
     project: Req.CreateProjectDto,
   ): Promise<Res.ProjectResDto> {
-    const createdProject = await this.projectsRepository.createProject(project);
+    const createdProject = await this.dataSource.transaction(
+      async (entityManager) => {
+        const projectEntity = this.projectsRepository.create(project);
+        const createdProject = await entityManager.save(projectEntity);
 
-    return plainToInstance(Res.ProjectResDto, createdProject);
+        if (project.professionals?.length > 0) {
+          const professionals =
+            this.professionalsProjectRepository.createProjectProfessionalsEntities(
+              projectEntity.id,
+              project.professionals,
+            );
+
+          await entityManager.save(professionals);
+        }
+        return createdProject;
+      },
+    );
+
+    return await this.getProjectById(createdProject.id);
   }
 
   public async updateProject(
     id: string,
-    project: Req.CreateProjectDto,
+    projectReqDto: Req.CreateProjectDto,
   ): Promise<Res.ProjectResDto> {
+    // TODO: Check if project exists before trying to update
+    const { professionals, ...project } = projectReqDto;
     await this.projectsRepository.update(id, { ...project });
+
+    await this.professionalsProjectRepository.updateProjectProfessionals(
+      id,
+      professionals,
+    );
 
     const updatedProject = await this.getProjectById(id);
 

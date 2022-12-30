@@ -2,7 +2,7 @@ import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 import {
   MethodologyEntity,
   TechnologyEntity,
-  ProfessionalProjectsEntity,
+  ProfessionalsProjectsEntity,
 } from '.';
 import { BaseEntity } from './base.entity';
 
@@ -30,10 +30,10 @@ export class ProjectEntity extends BaseEntity {
   description: string;
 
   @OneToMany(
-    () => ProfessionalProjectsEntity,
-    (professionalProjects) => professionalProjects.project,
+    () => ProfessionalsProjectsEntity,
+    (projectProfessionals) => projectProfessionals.project,
   )
-  professionals: ProfessionalProjectsEntity[];
+  professionals: ProfessionalsProjectsEntity[];
 
   @ManyToMany(() => TechnologyEntity)
   @JoinTable({ name: 'projects_technologies' })

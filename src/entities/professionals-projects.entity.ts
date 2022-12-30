@@ -1,9 +1,8 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { ProfessionalEntity } from './professional.entity';
-import { ProjectEntity } from './project.entity';
+import { ProfessionalEntity, ProjectEntity } from './';
 
 @Entity({ name: 'professionals_projects' })
-export class ProfessionalProjectsEntity {
+export class ProfessionalsProjectsEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
