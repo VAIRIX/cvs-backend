@@ -32,7 +32,9 @@ export class ProjectsController {
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: Res.ProjectResDto })
-  public getProjectById(@Param('id') id: string): Promise<Res.ProjectResDto> {
+  public getProjectById(
+    @Param() { id }: Req.FindOneParamsDto,
+  ): Promise<Res.ProjectResDto> {
     return this.projectsService.getProjectById(id);
   }
 

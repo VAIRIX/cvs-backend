@@ -33,7 +33,7 @@ export class MethodologiesController {
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: Res.MethodologyResDto })
   public getMethodologyById(
-    @Param('id') id: string,
+    @Param() { id }: Req.FindOneParamsDto,
   ): Promise<Res.MethodologyResDto> {
     return this.methodologiesService.getMethodologyById(id);
   }
