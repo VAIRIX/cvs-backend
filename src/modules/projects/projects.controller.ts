@@ -25,7 +25,7 @@ export class ProjectsController {
   @ApiOkResponse({ type: Res.ProjectResDto, isArray: true })
   public getProjects(
     @Query() projectsFilterDto: Req.GetProjectsFilterDto,
-  ): Promise<Res.ProjectResDto[]> {
+  ): Promise<Res.PaginatedListDto<Res.ProjectResDto>> {
     return this.projectsService.getProjects(projectsFilterDto);
   }
 
