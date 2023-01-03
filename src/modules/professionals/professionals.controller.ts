@@ -40,7 +40,7 @@ export class ProfessionalsController {
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: Res.ProfessionalResDto })
   public getProfessionalById(
-    @Param('id') id: string,
+    @Param() { id }: Req.FindOneParamsDto,
   ): Promise<Res.ProfessionalResDto> {
     return this.professionalsService.getProfessionalById(id);
   }
