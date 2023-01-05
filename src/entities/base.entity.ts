@@ -22,6 +22,9 @@ export abstract class BaseEntity {
   })
   public updatedAt: Date;
 
-  @DeleteDateColumn()
+  @DeleteDateColumn({
+    type: 'timestamp',
+    nullable: true,
+  })
   public deletedAt: Date;
 }

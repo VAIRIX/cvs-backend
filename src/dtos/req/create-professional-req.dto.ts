@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
+  IsAlpha,
   IsEmail,
   IsInt,
   IsNotEmpty,
@@ -18,12 +19,14 @@ export class CreateProfessionalDto {
   @IsNotEmpty()
   @MaxLength(DTO_VALIDATIONS.PROFESSIONAL_NAME_LENGTH)
   @IsString()
+  @IsAlpha()
   firstName: string;
 
   @ApiProperty({ type: String })
   @IsNotEmpty()
   @MaxLength(DTO_VALIDATIONS.PROFESSIONAL_NAME_LENGTH)
   @IsString()
+  @IsAlpha()
   lastName: string;
 
   @ApiProperty({ type: Number, default: 1 })

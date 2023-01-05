@@ -5,29 +5,49 @@ import {
   TechnologyEntity,
   MethodologyEntity,
 } from './';
+import { ENTITIES_VALIDATIONS } from 'src/constants/entities.constants';
 
 @Entity({ name: 'professionals' })
 export class ProfessionalEntity extends BaseEntity {
-  @Column()
+  @Column({
+    type: 'varchar',
+    length: ENTITIES_VALIDATIONS.SMALL_TEXT,
+  })
   firstName: string;
 
-  @Column()
+  @Column({
+    type: 'varchar',
+    length: ENTITIES_VALIDATIONS.SMALL_TEXT,
+  })
   lastName: string;
 
-  @Column()
+  @Column({
+    type: 'varchar',
+    length: ENTITIES_VALIDATIONS.DEFAULT_LENGTH_TEXT,
+  })
   email: string;
 
-  @Column()
+  @Column({
+    type: 'smallint',
+  })
   english: number;
 
-  @Column()
+  @Column({
+    type: 'varchar',
+    length: ENTITIES_VALIDATIONS.DEFAULT_LENGTH_TEXT,
+  })
   headline: string;
 
-  @Column()
+  @Column({
+    type: 'varchar',
+    length: ENTITIES_VALIDATIONS.BIG_TEXT,
+  })
   about: string;
 
   @Column({
     nullable: true,
+    type: 'varchar',
+    length: ENTITIES_VALIDATIONS.BIG_TEXT,
   })
   resumeUrl: string;
 

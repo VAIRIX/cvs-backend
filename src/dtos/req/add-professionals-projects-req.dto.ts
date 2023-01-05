@@ -1,20 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { IsUUID } from 'class-validator';
 
 class BaseProfessionalProjectsReqDto {
   @ApiProperty({ type: String })
-  @Expose()
   responsibility: string;
 }
 
 export class AddProjectsToProfessionalReqDto extends BaseProfessionalProjectsReqDto {
   @ApiProperty({ type: String })
-  @Expose()
+  @IsUUID()
   projectId: string;
 }
 
 export class AddProfessionalsToProjectReqDto extends BaseProfessionalProjectsReqDto {
   @ApiProperty({ type: String })
-  @Expose()
+  @IsUUID()
   professionalId: string;
 }
