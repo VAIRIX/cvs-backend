@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsDate, IsOptional, IsString } from 'class-validator';
+import { PaginatedQueryParams } from './paginated-query-params.dto';
 
-export class GetProjectsFilterDto {
+export class GetProjectsFilterDto extends PaginatedQueryParams {
   @ApiProperty({ type: String, required: false })
   @IsOptional()
   @IsString()

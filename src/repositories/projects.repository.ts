@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Req } from 'src/dtos';
+import { PaginatedResult } from 'src/types';
 import { DataSource, Repository } from 'typeorm';
 import { ProjectEntity } from '../entities/project.entity';
 
@@ -11,8 +12,8 @@ export class ProjectsRepository extends Repository<ProjectEntity> {
 
   public async getProjects(
     filterDto: Req.GetProjectsFilterDto,
-  ): Promise<ProjectEntity[]> {
-    const { search, startDate, endDate } = filterDto;
+  ): Promise<PaginatedResult<ProjectEntity>> {
+    const { search, startDate, endDate, pageNumber, pageSize } = filterDto;
 
     const query = this.createQueryBuilder('project');
 
@@ -26,8 +27,18 @@ export class ProjectsRepository extends Repository<ProjectEntity> {
 
     if (endDate) query.andWhere('project.to =< :endDate', { endDate });
 
+    query.take(pageSize).skip(pageNumber * pageSize);
+
+    const total = await query.getCount();
+
     const projects = await query.getMany();
 
-    return projects;
+    return {
+      items: projects,
+      total,
+      page: pageNumber,
+      pageSize,
+      totalPages: Math.ceil(total / pageSize),
+    };
   }
 }
