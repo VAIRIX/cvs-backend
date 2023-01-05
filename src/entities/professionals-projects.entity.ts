@@ -1,3 +1,4 @@
+import { ENTITIES_VALIDATIONS } from 'src/constants/entities.constants';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ProfessionalEntity, ProjectEntity } from './';
 
@@ -12,7 +13,10 @@ export class ProfessionalsProjectsEntity {
   @Column()
   projectId: string;
 
-  @Column()
+  @Column({
+    type: 'varchar',
+    length: ENTITIES_VALIDATIONS.DEFAULT_LENGTH_TEXT,
+  })
   responsibility: string;
 
   @ManyToOne(() => ProfessionalEntity, (professional) => professional.projects)

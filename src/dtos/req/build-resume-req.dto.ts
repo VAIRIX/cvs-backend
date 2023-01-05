@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsString, IsUUID } from 'class-validator';
 
 export class BuildResumeReqDto {
-  @IsString()
   @ApiProperty({ type: String })
+  @IsUUID()
+  @IsString()
   public professionalId!: string;
 }

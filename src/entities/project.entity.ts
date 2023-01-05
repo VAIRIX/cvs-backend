@@ -1,3 +1,4 @@
+import { ENTITIES_VALIDATIONS } from 'src/constants/entities.constants';
 import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 import {
   MethodologyEntity,
@@ -8,7 +9,10 @@ import { BaseEntity } from './base.entity';
 
 @Entity({ name: 'projects' })
 export class ProjectEntity extends BaseEntity {
-  @Column()
+  @Column({
+    type: 'varchar',
+    length: ENTITIES_VALIDATIONS.DEFAULT_LENGTH_TEXT,
+  })
   name: string;
 
   @Column({
@@ -23,10 +27,16 @@ export class ProjectEntity extends BaseEntity {
   })
   to: Date;
 
-  @Column()
+  @Column({
+    type: 'varchar',
+    length: ENTITIES_VALIDATIONS.DEFAULT_LENGTH_TEXT,
+  })
   duration: string;
 
-  @Column()
+  @Column({
+    type: 'varchar',
+    length: ENTITIES_VALIDATIONS.BIG_TEXT,
+  })
   description: string;
 
   @OneToMany(
