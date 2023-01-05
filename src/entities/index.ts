@@ -4,3 +4,6 @@ export * from './project.entity';
 export * from './professionals-projects.entity';
 export * from './technology.entity';
 export * from './methodology.entity';
+export * from './attributes.entity';
+export * from './professional-attributes.entity';
+export * from './project-attributes.entity';

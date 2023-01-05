@@ -4,6 +4,7 @@ import {
   MethodologyEntity,
   TechnologyEntity,
   ProfessionalsProjectsEntity,
+  ProjectAttributesEntity,
 } from '.';
 import { BaseEntity } from './base.entity';
 
@@ -52,4 +53,10 @@ export class ProjectEntity extends BaseEntity {
   @ManyToMany(() => MethodologyEntity)
   @JoinTable({ name: 'projects_methodologies' })
   methodologies: MethodologyEntity[];
+
+  @OneToMany(
+    () => ProjectAttributesEntity,
+    (projectAttributes) => projectAttributes.project,
+  )
+  attributes: ProjectAttributesEntity[];
 }
