@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   Query,
@@ -40,7 +41,7 @@ export class ProfessionalsController {
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: Res.ProfessionalResDto })
   public getProfessionalById(
-    @Param() { id }: Req.FindOneParamsDto,
+    @Param('id', new ParseUUIDPipe()) id: string,
   ): Promise<Res.ProfessionalResDto> {
     return this.professionalsService.getProfessionalById(id);
   }

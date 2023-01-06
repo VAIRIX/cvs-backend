@@ -7,4 +7,3 @@ export * from './get-projects-filter-req.dto';
 export * from './get-methodologies-filter-req.dto';
 export * from './build-resume-req.dto';
 export * from './add-professionals-projects-req.dto';
-export * from './find-one-params-req.dto';

@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   Query,
@@ -33,7 +34,7 @@ export class ProjectsController {
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: Res.ProjectResDto })
   public getProjectById(
-    @Param() { id }: Req.FindOneParamsDto,
+    @Param('id', new ParseUUIDPipe()) id: string,
   ): Promise<Res.ProjectResDto> {
     return this.projectsService.getProjectById(id);
   }
