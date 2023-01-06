@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   Query,
@@ -33,7 +34,7 @@ export class MethodologiesController {
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: Res.MethodologyResDto })
   public getMethodologyById(
-    @Param() { id }: Req.FindOneParamsDto,
+    @Param('id', new ParseUUIDPipe()) id: string,
   ): Promise<Res.MethodologyResDto> {
     return this.methodologiesService.getMethodologyById(id);
   }
