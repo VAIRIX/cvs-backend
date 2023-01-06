@@ -1,19 +1,27 @@
 import { Injectable } from '@nestjs/common';
-import { NotFoundException } from '@nestjs/common/exceptions';
+import {
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common/exceptions';
 import { plainToInstance } from 'class-transformer';
+import { API_RESPONSE_MESSAGES } from 'src/constants';
 import { Req, Res } from 'src/dtos';
 import {
   ProfessionalsRepository,
   ProfessionalsProjectsRepository,
+  ProfessionalAttributesRepository,
 } from 'src/repositories';
 import { helperCreatePaginatedResponse } from 'src/utils/api-paginated-response';
 import { DataSource } from 'typeorm';
+import { AttributesService } from '../attributes/attributes.service';
 
 @Injectable()
 export class ProfessionalsService {
   constructor(
     private readonly professionalsRepository: ProfessionalsRepository,
     private readonly professionalsProjectRepository: ProfessionalsProjectsRepository,
+    private readonly professionalsAttributesRepository: ProfessionalAttributesRepository,
+    private readonly attributesService: AttributesService,
     private readonly dataSource: DataSource,
   ) {}
 
@@ -39,8 +47,13 @@ export class ProfessionalsService {
         projects: {
           project: true,
         },
+        attributes: {
+          attribute: true,
+        },
       },
     });
+
+    console.log(professional.attributes);
 
     return plainToInstance(Res.ProfessionalResDto, professional);
   }
@@ -48,6 +61,15 @@ export class ProfessionalsService {
   public async createProfessional(
     professional: Req.CreateProfessionalDto,
   ): Promise<Res.ProfessionalResDto> {
+    if (
+      !(await this.attributesService.validateAttributesById(
+        professional?.attributes?.map(({ attributeId }) => attributeId),
+      ))
+    )
+      throw new ForbiddenException(
+        API_RESPONSE_MESSAGES.ATTRIBUTES_ARRAY_NOT_FOUND,
+      );
+
     const createdProfessional = await this.dataSource.transaction(
       async (entityManager) => {
         const professionalEntity =
@@ -66,9 +88,20 @@ export class ProfessionalsService {
           await entityManager.save(projects);
         }
 
+        if (professional.attributes?.length > 0) {
+          const attributes =
+            this.professionalsAttributesRepository.createProfessionalAttributeEntities(
+              professionalEntity.id,
+              professional.attributes,
+            );
+
+          await entityManager.save(attributes);
+        }
+
         return createdProfessional;
       },
     );
+
     return this.getProfessionalById(createdProfessional.id);
   }
 
@@ -76,12 +109,27 @@ export class ProfessionalsService {
     id: string,
     professionalReqDto: Req.CreateProfessionalDto,
   ): Promise<Res.ProfessionalResDto> {
-    const { projects, ...professional } = professionalReqDto;
+    const { projects, attributes, ...professional } = professionalReqDto;
+
+    if (
+      !(await this.attributesService.validateAttributesById(
+        attributes?.map(({ attributeId }) => attributeId),
+      ))
+    )
+      throw new ForbiddenException(
+        API_RESPONSE_MESSAGES.ATTRIBUTES_ARRAY_NOT_FOUND,
+      );
+
     await this.professionalsRepository.update(id, { ...professional });
 
     await this.professionalsProjectRepository.updateProfessionalProjects(
       id,
       projects,
+    );
+
+    await this.professionalsAttributesRepository.updateProfessionalAttributes(
+      id,
+      attributes,
     );
 
     const updatedProfessional = await this.getProfessionalById(id);
@@ -93,7 +141,9 @@ export class ProfessionalsService {
     const result = await this.professionalsRepository.softDelete(id);
 
     if (result.affected === 0) {
-      throw new NotFoundException(`Professional with ID "${id}" was not found`);
+      throw new NotFoundException(
+        API_RESPONSE_MESSAGES.ITEM_NOT_FOUND({ itemName: 'Professional', id }),
+      );
     }
   }
 }

@@ -1,8 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { AttributesService } from 'src/modules/attributes/attributes.service';
 import {
+  AttributesRepository,
+  AttributeTypesRepository,
   ProfessionalsProjectsRepository,
   ProjectsRepository,
 } from 'src/repositories';
+import { ProjectAttributesRepository } from 'src/repositories/project-attributes.repository';
 import { DataSource } from 'typeorm';
 import { ProjectsService } from '../projects.service';
 
@@ -24,6 +28,10 @@ describe('ProjectsService', () => {
             createEntityManager: jest.fn(),
           },
         },
+        ProjectAttributesRepository,
+        AttributesService,
+        AttributesRepository,
+        AttributeTypesRepository,
       ],
     }).compile();
 

@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ProfessionalEntity } from '.';
-import { AttributesEntity } from './attributes.entity';
+import { AttributeEntity } from './attribute.entity';
 
 @Entity({ name: 'professional_attributes' })
 export class ProfessionalAttributesEntity {
@@ -18,8 +18,8 @@ export class ProfessionalAttributesEntity {
   })
   level: number;
 
-  @ManyToOne(() => AttributesEntity, (attribute) => attribute.professionals)
-  attribute: AttributesEntity;
+  @ManyToOne(() => AttributeEntity, (attribute) => attribute.professionals)
+  attribute: AttributeEntity;
 
   @ManyToOne(
     () => ProfessionalEntity,

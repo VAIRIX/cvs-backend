@@ -14,6 +14,7 @@ import { ProjectsModule } from './modules/projects/projects.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { SeedModule } from './modules/seed/seed.module';
 import { MethodologiesModule } from './modules/methodologies/methodologies.module';
+import { AttributesModule } from './modules/attributes/attributes.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { MethodologiesModule } from './modules/methodologies/methodologies.modul
       inject: [databaseConfig.KEY],
     }),
     AuthModule,
+    AttributesModule,
     ProfessionalsModule,
     ProjectsModule,
     MethodologiesModule,
