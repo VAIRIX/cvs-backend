@@ -13,7 +13,7 @@ export class ProfessionalAttributesRepository extends Repository<ProfessionalAtt
     professionalId: string,
     attributes: Req.AddAttributeToProfessionalReqDto[],
   ): ProfessionalAttributesEntity[] {
-    const professionalAttributesEntities = attributes.map((attribute) =>
+    const professionalAttributesEntities = attributes?.map((attribute) =>
       this.create({
         attributeId: attribute.attributeId,
         professionalId,

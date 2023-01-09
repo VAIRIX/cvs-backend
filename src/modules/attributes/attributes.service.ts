@@ -81,6 +81,7 @@ export class AttributesService {
   }
 
   public async validateAttributesById(attributeIds: string[]) {
+    if (!attributeIds?.length) return true;
     const foundAttributes = await this.attributesRepository
       .createQueryBuilder('attributes')
       .where('id IN (:...attributeIds)', { attributeIds })

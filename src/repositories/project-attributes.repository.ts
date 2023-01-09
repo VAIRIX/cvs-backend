@@ -13,7 +13,7 @@ export class ProjectAttributesRepository extends Repository<ProjectAttributesEnt
     projectId: string,
     attributes: Req.AddAttributeToProjectReqDto[],
   ): ProjectAttributesEntity[] {
-    const projectAttributesEntities = attributes.map((attribute) =>
+    const projectAttributesEntities = attributes?.map((attribute) =>
       this.create({
         attributeId: attribute.attributeId,
         projectId,
