@@ -10,9 +10,13 @@ import {
   Max,
   MaxLength,
   Min,
+  ValidateNested,
 } from 'class-validator';
 import { DTO_VALIDATIONS } from 'src/constants';
-import { AddProjectsToProfessionalReqDto } from './add-professionals-projects-req.dto';
+import {
+  AddAttributeToProfessionalReqDto,
+  AddProjectsToProfessionalReqDto,
+} from '.';
 
 export class CreateProfessionalDto {
   @ApiProperty({ type: String })
@@ -59,5 +63,16 @@ export class CreateProfessionalDto {
   })
   @Type(() => AddProjectsToProfessionalReqDto)
   @IsOptional()
+  @ValidateNested()
   projects: AddProjectsToProfessionalReqDto[];
+
+  @ApiProperty({
+    type: AddAttributeToProfessionalReqDto,
+    isArray: true,
+    required: false,
+  })
+  @Type(() => AddAttributeToProfessionalReqDto)
+  @IsOptional()
+  @ValidateNested()
+  attributes: AddAttributeToProfessionalReqDto[];
 }

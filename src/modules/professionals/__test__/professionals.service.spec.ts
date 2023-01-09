@@ -1,7 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { AttributesService } from 'src/modules/attributes/attributes.service';
 import {
+  AttributesRepository,
+  AttributeTypesRepository,
+  ProfessionalAttributesRepository,
   ProfessionalsProjectsRepository,
   ProfessionalsRepository,
+  ProjectAttributesRepository,
 } from 'src/repositories';
 import { DataSource } from 'typeorm';
 import { ProfessionalsService } from '../professionals.service';
@@ -22,8 +27,14 @@ describe('ProfessionalsService', () => {
           provide: DataSource,
           useValue: {
             transaction: jest.fn(),
+            createEntityManager: jest.fn(),
           },
         },
+        ProfessionalAttributesRepository,
+        ProjectAttributesRepository,
+        AttributesService,
+        AttributesRepository,
+        AttributeTypesRepository,
       ],
     }).compile();
 

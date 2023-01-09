@@ -1,6 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { ProjectEntity } from '.';
-import { AttributesEntity } from './attributes.entity';
+import { ProjectEntity, AttributeEntity } from '.';
 
 @Entity({ name: 'project_attributes' })
 export class ProjectAttributesEntity {
@@ -25,8 +24,8 @@ export class ProjectAttributesEntity {
   })
   to: Date;
 
-  @ManyToOne(() => AttributesEntity, (attribute) => attribute.project)
-  attribute: AttributesEntity;
+  @ManyToOne(() => AttributeEntity, (attribute) => attribute.project)
+  attribute: AttributeEntity;
 
   @ManyToOne(() => ProjectEntity, (project) => project.attributes)
   project: ProjectEntity;

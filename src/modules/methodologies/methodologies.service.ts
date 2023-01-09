@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common/exceptions';
 import { plainToInstance } from 'class-transformer';
+import { API_RESPONSE_MESSAGES } from 'src/constants';
 import { Req, Res } from 'src/dtos';
 import { MethodologiesRepository } from 'src/repositories';
 
@@ -54,7 +55,9 @@ export class MethodologiesService {
     const result = await this.methodologiesRepository.delete(id);
 
     if (result.affected === 0) {
-      throw new NotFoundException(`Methodology with ID "${id}" was not found`);
+      throw new NotFoundException(
+        API_RESPONSE_MESSAGES.ITEM_NOT_FOUND({ itemName: 'Methodology', id }),
+      );
     }
   }
 }

@@ -5,3 +5,7 @@ export * from './projects.repository';
 export * from './professionals-projects.repository';
 export * from './technologies.repository';
 export * from './methodologies.repository';
+export * from './attributes.repository';
+export * from './professional-attributes.repository';
+export * from './attribute-types.repository';
+export * from './project-attributes.repository';
