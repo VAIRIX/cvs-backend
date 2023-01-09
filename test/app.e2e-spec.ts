@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
+import request from 'supertest';
 import { AppModule } from './../src/app.module';
 
 describe('AppController (e2e)', () => {
@@ -15,10 +15,33 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', () => {
+  it('/sign-in (POST)', async () => {
+    const response = await request(app.getHttpServer())
+      .post('/auth/sign-in')
+      .send({
+        username: 'admin',
+        password: 'admin',
+      })
+      .expect(200);
+
+    expect(response.body).toHaveProperty('accessToken');
+
+    const accessToken = response.body.accessToken;
+
     return request(app.getHttpServer())
-      .get('/')
+      .get('/professionals')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .query({
+        pageNumber: 0,
+        pageSize: 10,
+      })
       .expect(200)
-      .expect('Hello World!');
+      .expect((res) => {
+        expect(res.body).toHaveProperty('items');
+        expect(res.body).toHaveProperty('total');
+        expect(res.body).toHaveProperty('pageSize');
+        expect(res.body).toHaveProperty('page');
+        expect(res.body).toHaveProperty('totalPages');
+      });
   });
 });
