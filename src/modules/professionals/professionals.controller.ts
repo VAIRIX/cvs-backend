@@ -19,11 +19,13 @@ import {
 } from '@nestjs/swagger';
 import { Req, Res } from 'src/dtos';
 import { ApiPaginatedResponse } from 'src/utils/api-paginated-response';
+import { Public } from '../auth/decorators/public.decorator';
 import { ProfessionalsService } from './professionals.service';
 
 @Controller('professionals')
 @ApiBearerAuth()
 @ApiTags('Professionals')
+@Public()
 export class ProfessionalsController {
   constructor(private readonly professionalsService: ProfessionalsService) {}
 
