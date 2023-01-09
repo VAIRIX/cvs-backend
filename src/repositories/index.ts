@@ -8,3 +8,4 @@ export * from './methodologies.repository';
 export * from './attributes.repository';
 export * from './professional-attributes.repository';
 export * from './attribute-types.repository';
+export * from './project-attributes.repository';

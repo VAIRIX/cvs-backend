@@ -50,8 +50,6 @@ export class AttributesService {
       type: attributeType,
     });
 
-    console.log({ createdAttribute });
-
     return plainToInstance(Res.AttributeResDto, createdAttribute);
   }
 
@@ -67,7 +65,7 @@ export class AttributesService {
   }
 
   public async deleteAttribute(id: string): Promise<void> {
-    const result = await this.attributesRepository.delete(id);
+    const result = await this.attributesRepository.softDelete(id);
 
     if (result.affected === 0) {
       throw new NotFoundException(

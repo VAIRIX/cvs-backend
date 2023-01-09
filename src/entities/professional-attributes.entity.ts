@@ -1,6 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { ProfessionalEntity } from '.';
-import { AttributeEntity } from './attribute.entity';
+import { ProfessionalEntity, AttributeEntity } from '.';
 
 @Entity({ name: 'professional_attributes' })
 export class ProfessionalAttributesEntity {

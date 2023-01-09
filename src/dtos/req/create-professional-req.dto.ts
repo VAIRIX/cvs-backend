@@ -13,8 +13,10 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { DTO_VALIDATIONS } from 'src/constants';
-import { AddAttributeToProfessionalReqDto } from './add-attributes-req.dto';
-import { AddProjectsToProfessionalReqDto } from './add-professionals-projects-req.dto';
+import {
+  AddAttributeToProfessionalReqDto,
+  AddProjectsToProfessionalReqDto,
+} from '.';
 
 export class CreateProfessionalDto {
   @ApiProperty({ type: String })

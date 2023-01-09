@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AttributeEntity } from 'src/entities';
-import { AttributeTypeEntity } from 'src/entities/attribute-types.entity';
+import { AttributeEntity, AttributeTypeEntity } from 'src/entities';
 import {
   AttributesRepository,
   AttributeTypesRepository,

@@ -8,8 +8,10 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { IsDateAfter } from '../validations/is-date-after';
-import { AddAttributeToProjectReqDto } from './add-attributes-req.dto';
-import { AddProfessionalsToProjectReqDto } from './add-professionals-projects-req.dto';
+import {
+  AddAttributeToProjectReqDto,
+  AddProfessionalsToProjectReqDto,
+} from '.';
 
 export class CreateProjectDto {
   @ApiProperty({ type: String })

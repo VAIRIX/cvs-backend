@@ -1,9 +1,11 @@
-import { ENTITIES_VALIDATIONS } from 'src/constants/entities.constants';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
-import { ProfessionalAttributesEntity } from '.';
-import { AttributeTypeEntity } from './attribute-types.entity';
+import { ENTITIES_VALIDATIONS } from 'src/constants';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import {
+  ProfessionalAttributesEntity,
+  AttributeTypeEntity,
+  ProjectAttributesEntity,
+} from '.';
 import { BaseEntity } from './base.entity';
-import { ProjectAttributesEntity } from './project-attributes.entity';
 
 @Entity({ name: 'attributes' })
 export class AttributeEntity extends BaseEntity {

@@ -53,8 +53,6 @@ export class ProfessionalsService {
       },
     });
 
-    console.log(professional.attributes);
-
     return plainToInstance(Res.ProfessionalResDto, professional);
   }
 

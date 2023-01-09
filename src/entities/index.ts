@@ -8,3 +8,4 @@ export * from './methodology.entity';
 export * from './attribute.entity';
 export * from './professional-attributes.entity';
 export * from './project-attributes.entity';
+export * from './attribute-types.entity';

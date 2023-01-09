@@ -9,10 +9,13 @@ import { Req, Res } from 'src/dtos';
 import {
   ProfessionalsProjectsRepository,
   ProjectsRepository,
+  ProjectAttributesRepository,
 } from 'src/repositories';
-import { ProjectAttributesRepository } from 'src/repositories/project-attributes.repository';
-import { helperCreatePaginatedResponse } from 'src/utils/api-paginated-response';
-import { isSameOrAfter, isSameOrBefore } from 'src/utils/date-validations';
+import {
+  isSameOrAfter,
+  isSameOrBefore,
+  helperCreatePaginatedResponse,
+} from 'src/utils';
 import { DataSource } from 'typeorm';
 import { AttributesService } from '../attributes/attributes.service';
 

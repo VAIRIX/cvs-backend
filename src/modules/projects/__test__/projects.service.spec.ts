@@ -5,8 +5,8 @@ import {
   AttributeTypesRepository,
   ProfessionalsProjectsRepository,
   ProjectsRepository,
+  ProjectAttributesRepository,
 } from 'src/repositories';
-import { ProjectAttributesRepository } from 'src/repositories/project-attributes.repository';
 import { DataSource } from 'typeorm';
 import { ProjectsService } from '../projects.service';
 
