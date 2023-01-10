@@ -31,7 +31,7 @@ export class ProfessionalsProjectsRepository extends Repository<ProfessionalsPro
     professionalId: string,
     projects: Req.AddProjectsToProfessionalReqDto[],
   ): ProfessionalsProjectsEntity[] {
-    const professionalProjectsEntities = projects.map((project) =>
+    const professionalProjectsEntities = projects?.map((project) =>
       this.create({
         professionalId,
         projectId: project.projectId,
@@ -46,7 +46,7 @@ export class ProfessionalsProjectsRepository extends Repository<ProfessionalsPro
     projectId: string,
     professionals: Req.AddProfessionalsToProjectReqDto[],
   ): ProfessionalsProjectsEntity[] {
-    const professionalProjectsEntities = professionals.map((professional) =>
+    const professionalProjectsEntities = professionals?.map((professional) =>
       this.create({
         projectId,
         professionalId: professional.professionalId,
