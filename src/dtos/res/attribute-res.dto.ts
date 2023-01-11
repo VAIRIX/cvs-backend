@@ -8,7 +8,7 @@ export class AttributeResDto extends BaseResDto {
   @Expose()
   name: string;
 
-  @ApiProperty({ type: String })
+  @ApiProperty({ type: () => AttributeTypeResDto })
   @Type(() => AttributeTypeResDto)
   @Expose()
   type: AttributeTypeResDto;

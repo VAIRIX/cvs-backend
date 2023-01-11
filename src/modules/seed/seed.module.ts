@@ -2,34 +2,20 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { SeedService } from './seed.service';
+import { AttributeEntity, AttributeTypeEntity } from 'src/entities';
 import {
-  ProfessionalEntity,
-  ProfessionalsProjectsEntity,
-  ProjectEntity,
-  TechnologyEntity,
-} from 'src/entities';
-import {
-  ProfessionalsRepository,
-  ProjectsRepository,
-  ProfessionalsProjectsRepository,
-  TechnologiesRepository,
+  AttributeTypesRepository,
+  AttributesRepository,
 } from 'src/repositories';
+import { ProfessionalsModule } from '../professionals/professionals.module';
+import { ProjectsModule } from '../projects/projects.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      ProfessionalEntity,
-      ProjectEntity,
-      ProfessionalsProjectsEntity,
-      TechnologyEntity,
-    ]),
+    TypeOrmModule.forFeature([AttributeTypeEntity, AttributeEntity]),
+    ProfessionalsModule,
+    ProjectsModule,
   ],
-  providers: [
-    SeedService,
-    ProfessionalsRepository,
-    ProjectsRepository,
-    ProfessionalsProjectsRepository,
-    TechnologiesRepository,
-  ],
+  providers: [SeedService, AttributeTypesRepository, AttributesRepository],
 })
 export class SeedModule {}
