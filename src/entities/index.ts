@@ -3,8 +3,6 @@ export * from './attribute.entity';
 export * from './professional.entity';
 export * from './project.entity';
 export * from './professionals-projects.entity';
-export * from './technology.entity';
-export * from './methodology.entity';
 export * from './attribute.entity';
 export * from './professional-attributes.entity';
 export * from './project-attributes.entity';

@@ -1,11 +1,6 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseEntity } from './base.entity';
-import {
-  ProfessionalsProjectsEntity,
-  TechnologyEntity,
-  MethodologyEntity,
-  ProfessionalAttributesEntity,
-} from './';
+import { ProfessionalsProjectsEntity, ProfessionalAttributesEntity } from './';
 import { ENTITIES_VALIDATIONS } from 'src/constants/entities.constants';
 
 @Entity({ name: 'professionals' })
@@ -63,14 +58,6 @@ export class ProfessionalEntity extends BaseEntity {
     (professionalProjects) => professionalProjects.professional,
   )
   projects: ProfessionalsProjectsEntity[];
-
-  @ManyToMany(() => TechnologyEntity)
-  @JoinTable({ name: 'professionals_technologies' })
-  technologies: TechnologyEntity[];
-
-  @ManyToMany(() => MethodologyEntity)
-  @JoinTable({ name: 'professionals_methodologies' })
-  methodologies: MethodologyEntity[];
 
   @OneToMany(
     () => ProfessionalAttributesEntity,

@@ -3,13 +3,11 @@ import {
   ProfessionalsProjectsRepository,
   ProfessionalsRepository,
   ProjectsRepository,
-  TechnologiesRepository,
 } from 'src/repositories';
 import { SeedService } from '../seed.service';
 
 jest.mock('../../../repositories/projects.repository');
 jest.mock('../../../repositories/professionals.repository');
-jest.mock('../../../repositories/technologies.repository');
 jest.mock('../../../repositories/professionals-projects.repository');
 
 describe('SeedService', () => {
@@ -22,7 +20,6 @@ describe('SeedService', () => {
         ProfessionalsRepository,
         ProjectsRepository,
         ProfessionalsProjectsRepository,
-        TechnologiesRepository,
       ],
     }).compile();
 
