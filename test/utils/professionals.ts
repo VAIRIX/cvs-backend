@@ -20,6 +20,13 @@ type getProfessionalsProps = {
   queries?: object;
 };
 
+type updateProfessionalProps = {
+  app: INestApplication;
+  accessToken: string;
+  id: unknown;
+  updatedProfessional: object;
+};
+
 const validateBaseProfessional = (professional: Res.ProfessionalResDto) => {
   expect(professional).toHaveProperty('firstName');
   expect(professional).toHaveProperty('lastName');
@@ -85,10 +92,22 @@ const getProfessionals = ({
       ...queries,
     });
 
+const updateProfessional = ({
+  app,
+  accessToken,
+  id,
+  updatedProfessional,
+}: updateProfessionalProps) =>
+  request(app.getHttpServer())
+    .put(`/professionals/${id}`)
+    .set('Authorization', `Bearer ${accessToken}`)
+    .send(updatedProfessional);
+
 export {
   createProfessional,
   getProfessionalById,
   getProfessionals,
+  updateProfessional,
   validateProfessional,
   validateBaseProfessional,
   validateProfessionalsResponse,
