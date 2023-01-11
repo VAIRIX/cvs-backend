@@ -1,14 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { ProfessionalsService } from 'src/modules/professionals/professionals.service';
+import { ProjectsService } from 'src/modules/projects/projects.service';
 import {
-  ProfessionalsProjectsRepository,
-  ProfessionalsRepository,
-  ProjectsRepository,
+  AttributesRepository,
+  AttributeTypesRepository,
 } from 'src/repositories';
 import { SeedService } from '../seed.service';
 
-jest.mock('../../../repositories/projects.repository');
-jest.mock('../../../repositories/professionals.repository');
-jest.mock('../../../repositories/professionals-projects.repository');
+jest.mock('../../../repositories/attributes.repository');
+jest.mock('../../../repositories/attribute-types.repository');
+jest.mock('../../../modules/projects/projects.service');
+jest.mock('../../../modules/professionals/professionals.service');
 
 describe('SeedService', () => {
   let service: SeedService;
@@ -17,9 +19,10 @@ describe('SeedService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         SeedService,
-        ProfessionalsRepository,
-        ProjectsRepository,
-        ProfessionalsProjectsRepository,
+        ProjectsService,
+        ProfessionalsService,
+        AttributeTypesRepository,
+        AttributesRepository,
       ],
     }).compile();
 

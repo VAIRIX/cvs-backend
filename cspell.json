@@ -1,6 +1,14 @@
 {
   "version": "0.2",
-  "words": ["dbname", "dtos", "googleauth", "nestjs", "pgdata", "typeorm"],
+  "words": [
+    "dbname",
+    "dtos",
+    "googleauth",
+    "nestjs",
+    "pgdata",
+    "typeorm",
+    "Kanban"
+  ],
   "language": "en",
   "ignorePaths": [
     "./README.md",

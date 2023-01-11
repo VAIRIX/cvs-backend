@@ -22,5 +22,6 @@ import { ProfessionalsService } from './professionals.service';
     ProfessionalsProjectsRepository,
     ProfessionalAttributesRepository,
   ],
+  exports: [ProfessionalsService],
 })
 export class ProfessionalsModule {}

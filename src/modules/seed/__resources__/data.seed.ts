@@ -1,29 +1,71 @@
+import { DEFAULT_ATTRIBUTES_TYPES } from 'src/constants';
 import {
   ProjectEntity,
-  TechnologyEntity,
   ProfessionalEntity,
+  AttributeEntity,
+  AttributeTypeEntity,
 } from 'src/entities';
 
-export const technologiesSeed: Partial<TechnologyEntity>[] = [
+export const responsibilitySeed = [
+  'Frontend',
+  'Backend',
+  'Fullstack',
+  'Mobile',
+  'DevOps',
+  'QA',
+];
+
+export const attributeTypesSeed: Partial<AttributeTypeEntity>[] = [
+  {
+    name: DEFAULT_ATTRIBUTES_TYPES.TECHNOLOGIES,
+  },
+  {
+    name: DEFAULT_ATTRIBUTES_TYPES.METHODOLOGIES,
+  },
+  {
+    name: DEFAULT_ATTRIBUTES_TYPES.SKILLS,
+  },
+];
+
+export const technologiesSeed: Partial<AttributeEntity>[] = [
   {
     name: 'ReactJS',
-    field: 'Frontend',
   },
   {
     name: 'Tailwind',
-    field: 'Frontend',
   },
   {
     name: 'NodeJS',
-    field: 'Backend',
   },
   {
     name: 'TypeORM',
-    field: 'Backend',
   },
   {
     name: 'PostgreSQL',
-    field: 'Database',
+  },
+];
+
+export const methodologiesSeed: Partial<AttributeEntity>[] = [
+  {
+    name: 'Scrum',
+  },
+  {
+    name: 'Kanban',
+  },
+];
+
+export const skillsSeed: Partial<AttributeEntity>[] = [
+  {
+    name: 'Teamwork',
+  },
+  {
+    name: 'Communication',
+  },
+  {
+    name: 'Problem solving',
+  },
+  {
+    name: 'Self-learning',
   },
 ];
 

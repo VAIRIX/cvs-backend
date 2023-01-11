@@ -4,15 +4,19 @@ import { ConfigType } from '@nestjs/config';
 import {
   GoogleDocTemplateFields,
   GoogleReplaceRequest,
+  ProfessionalAttributeType,
   ProfessionalResumeData,
+  ProjectAttributeType,
   ProjectResumeData,
 } from 'src/types/';
 import { Req, Res } from 'src/dtos';
 import { GoogleService } from 'src/modules/google/google.service';
 import { plainToInstance } from 'class-transformer';
 import { ProfessionalsRepository } from 'src/repositories';
-import { ProfessionalEntity, TechnologyEntity } from 'src/entities';
+import { ProfessionalEntity } from 'src/entities';
 import { format } from 'date-fns';
+import { AttributesService } from '../attributes/attributes.service';
+import { DEFAULT_ATTRIBUTES_TYPES } from 'src/constants';
 
 @Injectable()
 export class ResumeBuilderService {
@@ -23,6 +27,7 @@ export class ResumeBuilderService {
     private readonly googleConf: ConfigType<typeof googleConfig>,
     private readonly googleService: GoogleService,
     private readonly professionalsRepository: ProfessionalsRepository,
+    private readonly attributesService: AttributesService,
   ) {
     this.googleDocTemplateFields = this.googleConf.googleDocTemplateFields;
   }
@@ -33,10 +38,18 @@ export class ResumeBuilderService {
       relations: {
         projects: {
           project: {
-            technologies: true,
+            attributes: {
+              attribute: {
+                type: true,
+              },
+            },
           },
         },
-        technologies: true,
+        attributes: {
+          attribute: {
+            type: true,
+          },
+        },
       },
     });
 
@@ -163,26 +176,26 @@ export class ResumeBuilderService {
     return projectsArray;
   }
 
-  private parseProfessionalTechnologies(
-    technologies: TechnologyEntity[],
+  private parseProfessionalAttributes(
+    attributes: ProfessionalAttributeType[],
   ): string {
-    let parsedTechnologies = '';
+    let parsedAttributes = '';
 
-    technologies?.forEach((technology) => {
-      parsedTechnologies += technology.name + '\n';
+    attributes?.forEach((attribute) => {
+      parsedAttributes += attribute.name + '\n';
     });
 
-    return parsedTechnologies;
+    return parsedAttributes;
   }
 
-  private parseProjectTechnologies(technologies: TechnologyEntity[]): string {
-    let parsedTechnologies = '';
+  private parseProjectAttributes(attributes: ProjectAttributeType[]): string {
+    let parsedAttributes = '';
 
-    technologies?.forEach((technology) => {
-      parsedTechnologies += technology.name + ', ';
+    attributes?.forEach((attribute) => {
+      parsedAttributes += attribute.name + ', ';
     });
 
-    return parsedTechnologies;
+    return parsedAttributes;
   }
 
   private replaceIndexString(text: string, index: number) {
@@ -224,16 +237,25 @@ export class ResumeBuilderService {
   private createProfessionalResumeData(
     professional: ProfessionalEntity,
   ): ProfessionalResumeData {
+    const professionalAttributesKeyMap =
+      this.attributesService.professionalAttributesKeyMap(
+        professional.attributes,
+      );
+
     const projects: ProjectResumeData[] = professional.projects.map(
       (project) => {
+        const projectAttributesKeyMap =
+          this.attributesService.projectAttributesKeyMap(
+            project.project.attributes,
+          );
         return {
           description: project.project.description,
           duration: `${project.project.duration} months`,
           name: project.project.name,
           startDate: project.project.from,
           endDate: project.project.to,
-          technologies: this.parseProjectTechnologies(
-            project.project.technologies,
+          technologies: this.parseProjectAttributes(
+            projectAttributesKeyMap.get(DEFAULT_ATTRIBUTES_TYPES.TECHNOLOGIES),
           ),
           responsibility: project.responsibility,
         };
@@ -247,8 +269,8 @@ export class ResumeBuilderService {
       aboutMe: professional.about,
       englishLevel: this.createLevelString(professional.english),
       projects: projects,
-      technologies: this.parseProfessionalTechnologies(
-        professional.technologies,
+      technologies: this.parseProfessionalAttributes(
+        professionalAttributesKeyMap.get(DEFAULT_ATTRIBUTES_TYPES.TECHNOLOGIES),
       ),
     };
   }

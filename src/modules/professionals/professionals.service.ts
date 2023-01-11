@@ -48,7 +48,9 @@ export class ProfessionalsService {
           project: true,
         },
         attributes: {
-          attribute: true,
+          attribute: {
+            type: true,
+          },
         },
       },
     });

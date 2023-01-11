@@ -4,9 +4,14 @@ import { plainToInstance } from 'class-transformer';
 import { API_RESPONSE_MESSAGES } from 'src/constants';
 import { Req, Res } from 'src/dtos';
 import {
+  ProfessionalAttributesEntity,
+  ProjectAttributesEntity,
+} from 'src/entities';
+import {
   AttributesRepository,
   AttributeTypesRepository,
 } from 'src/repositories';
+import { ProfessionalAttributeType, ProjectAttributeType } from 'src/types';
 
 @Injectable()
 export class AttributesService {
@@ -88,5 +93,44 @@ export class AttributesService {
       .getMany();
 
     return foundAttributes?.length === attributeIds?.length;
+  }
+
+  public professionalAttributesKeyMap(
+    attributes: ProfessionalAttributesEntity[],
+  ): Map<string, ProfessionalAttributeType[]> {
+    const attributesByType = new Map<string, ProfessionalAttributeType[]>();
+    attributes.forEach((professionalAttribute) => {
+      const { attribute } = professionalAttribute;
+      const { type } = attribute;
+      const { name: attributeTypeName } = type;
+      if (!attributesByType.has(attributeTypeName)) {
+        attributesByType.set(attributeTypeName, []);
+      }
+      attributesByType.get(attributeTypeName).push({
+        level: professionalAttribute.level,
+        name: attribute.name,
+      });
+    });
+    return attributesByType;
+  }
+
+  public projectAttributesKeyMap(
+    attributes: ProjectAttributesEntity[],
+  ): Map<string, ProjectAttributeType[]> {
+    const attributesByType = new Map<string, ProjectAttributeType[]>();
+    attributes.forEach((projectAttribute) => {
+      const { attribute } = projectAttribute;
+      const { type } = attribute;
+      const { name: attributeTypeName } = type;
+      if (!attributesByType.has(attributeTypeName)) {
+        attributesByType.set(attributeTypeName, []);
+      }
+      attributesByType.get(attributeTypeName).push({
+        from: projectAttribute.from,
+        to: projectAttribute.to,
+        name: attribute.name,
+      });
+    });
+    return attributesByType;
   }
 }
