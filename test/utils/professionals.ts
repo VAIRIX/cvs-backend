@@ -27,6 +27,12 @@ type updateProfessionalProps = {
   updatedProfessional: object;
 };
 
+type deleteProfessionalProps = {
+  app: INestApplication;
+  accessToken: string;
+  id: unknown;
+};
+
 const validateBaseProfessional = (professional: Res.ProfessionalResDto) => {
   expect(professional).toHaveProperty('firstName');
   expect(professional).toHaveProperty('lastName');
@@ -45,7 +51,7 @@ const validateProfessional = (professional: Res.ProfessionalResDto) => {
   expect(professional).toHaveProperty('attributes');
 };
 
-const validateProfessionalsResponse = (professionalsResponse) => {
+const validateProfessionalsList = (professionalsResponse) => {
   expect(professionalsResponse).toHaveProperty('items');
   expect(professionalsResponse).toHaveProperty('total');
   expect(professionalsResponse).toHaveProperty('pageSize');
@@ -103,12 +109,22 @@ const updateProfessional = ({
     .set('Authorization', `Bearer ${accessToken}`)
     .send(updatedProfessional);
 
+const deleteProfessional = ({
+  app,
+  accessToken,
+  id,
+}: deleteProfessionalProps) =>
+  request(app.getHttpServer())
+    .delete(`/professionals/${id}`)
+    .set('Authorization', `Bearer ${accessToken}`);
+
 export {
   createProfessional,
   getProfessionalById,
   getProfessionals,
   updateProfessional,
+  deleteProfessional,
   validateProfessional,
   validateBaseProfessional,
-  validateProfessionalsResponse,
+  validateProfessionalsList,
 };

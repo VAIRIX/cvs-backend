@@ -3,13 +3,14 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { AppModule } from './../src/app.module';
 import {
   createProfessional,
+  deleteProfessional,
   getProfessionalById,
   getProfessionals,
   signIn,
   updateProfessional,
   validateErrorResponse,
   validateProfessional,
-  validateProfessionalsResponse,
+  validateProfessionalsList,
 } from './utils';
 
 const mockProfessional = {
@@ -104,33 +105,33 @@ describe('Create', () => {
     it('invalid lastNames', async () => {
       const invalidLastNames = [
         {
-          lastName: 'This lastName is too long to be considered a lastname',
           statusCode: 400,
+          lastName: 'This lastName is too long to be considered a lastname',
           message: 'lastName must be shorter than or equal to 24 characters',
         },
         {
-          lastName: '',
           statusCode: 400,
+          lastName: '',
           message: 'lastName should not be empty',
         },
         {
-          lastName: ',0[];{}:!@#$%^&*()',
           statusCode: 400,
+          lastName: ',0[];{}:!@#$%^&*()',
           message: 'lastName must contain only letters (a-zA-Z)',
         },
         {
+          statusCode: 400,
           lastName: 10,
-          statusCode: 400,
           message: 'lastName must be a string',
         },
         {
+          statusCode: 400,
           lastName: ['foo'],
-          statusCode: 400,
           message: 'lastName must be a string',
         },
         {
-          lastName: { 0: 'foo' },
           statusCode: 400,
+          lastName: { 0: 'foo' },
           message: 'lastName must be a string',
         },
       ];
@@ -152,33 +153,33 @@ describe('Create', () => {
     it('invalid english levels', async () => {
       const invalidEnglishLevels = [
         {
-          english: 0,
           statusCode: 400,
+          english: 0,
           message: 'english must not be less than 1',
         },
         {
-          english: 6,
           statusCode: 400,
+          english: 6,
           message: 'english must not be greater than 5',
         },
         {
+          statusCode: 400,
           english: 3.5,
-          statusCode: 400,
           message: 'english must be an integer number',
         },
         {
+          statusCode: 400,
           english: '3.5',
-          statusCode: 400,
           message: 'english must be an integer number',
         },
         {
+          statusCode: 400,
           english: '3',
-          statusCode: 400,
           message: 'english must be an integer number',
         },
         {
-          english: [3],
           statusCode: 400,
+          english: [3],
           message: 'english must be an integer number',
         },
       ];
@@ -200,28 +201,28 @@ describe('Create', () => {
     it('invalid abouts', async () => {
       const invalidAbouts = [
         {
-          about: 'invalid'.repeat(1000),
           statusCode: 400,
+          about: 'invalid'.repeat(1000),
           message: 'about must be shorter than or equal to 2048 characters',
         },
         {
-          about: '',
           statusCode: 400,
+          about: '',
           message: 'about should not be empty',
         },
         {
+          statusCode: 400,
           about: 0,
-          statusCode: 400,
           message: 'about must be a string',
         },
         {
+          statusCode: 400,
           about: [],
-          statusCode: 400,
           message: 'about must be a string',
         },
         {
-          about: {},
           statusCode: 400,
+          about: {},
           message: 'about must be a string',
         },
       ];
@@ -243,43 +244,43 @@ describe('Create', () => {
     it('invalid emails', async () => {
       const invalidEmails = [
         {
-          email: '',
           statusCode: 400,
+          email: '',
           message: 'email should not be empty',
         },
         {
+          statusCode: 400,
           email: 'email',
-          statusCode: 400,
           message: 'email must be an email',
         },
         {
+          statusCode: 400,
           email: 'email@',
-          statusCode: 400,
           message: 'email must be an email',
         },
         {
+          statusCode: 400,
           email: '@email',
-          statusCode: 400,
           message: 'email must be an email',
         },
         {
+          statusCode: 400,
           email: '.com',
-          statusCode: 400,
           message: 'email must be an email',
         },
         {
+          statusCode: 400,
           email: 'email@email',
-          statusCode: 400,
           message: 'email must be an email',
         },
         {
+          statusCode: 400,
           email: '0',
-          statusCode: 400,
           message: 'email must be an email',
         },
         {
-          email: 0,
           statusCode: 400,
+          email: 0,
           message: 'email must be an email',
         },
       ];
@@ -345,7 +346,7 @@ describe('Get', () => {
         });
 
         expect(status).toBe(200);
-        validateProfessionalsResponse(professionalsResponse);
+        validateProfessionalsList(professionalsResponse);
       });
 
       it('"search" query param', async () => {
@@ -364,7 +365,7 @@ describe('Get', () => {
             });
 
           expect(status).toBe(statusCode);
-          validateProfessionalsResponse(professionalsResponse);
+          validateProfessionalsList(professionalsResponse);
         }
       });
 
@@ -381,11 +382,11 @@ describe('Get', () => {
             });
 
           expect(status).toBe(statusCode);
-          validateProfessionalsResponse(professionalsResponse);
+          validateProfessionalsList(professionalsResponse);
         }
       });
 
-      it.skip('"maxEnglish" query param', async () => {
+      it('"maxEnglish" query param', async () => {
         const searchCases = [{ statusCode: 200, maxEnglish: 3 }];
 
         for (const searchCase of searchCases) {
@@ -398,11 +399,11 @@ describe('Get', () => {
             });
 
           expect(status).toBe(statusCode);
-          validateProfessionalsResponse(professionalsResponse);
+          validateProfessionalsList(professionalsResponse);
         }
       });
 
-      it.skip('given multiple query params', async () => {
+      it('given multiple query params', async () => {
         const searchCases = [{ statusCode: 200, maxEnglish: 3 }];
 
         for (const searchCase of searchCases) {
@@ -415,13 +416,13 @@ describe('Get', () => {
             });
 
           expect(status).toBe(statusCode);
-          validateProfessionalsResponse(professionalsResponse);
+          validateProfessionalsList(professionalsResponse);
         }
       });
     });
 
     describe('should fail with', () => {
-      it.skip('lower maxEnglish than minEnglish', async () => {
+      it('lower maxEnglish than minEnglish', async () => {
         const searchCases = [{ statusCode: 200, maxEnglish: 1, minEnglish: 3 }];
 
         for (const searchCase of searchCases) {
@@ -434,7 +435,7 @@ describe('Get', () => {
             });
 
           expect(status).toBe(statusCode);
-          validateProfessionalsResponse(professionalsResponse);
+          validateProfessionalsList(professionalsResponse);
         }
       });
     });
@@ -612,33 +613,33 @@ describe('Update', () => {
     it('invalid lastNames', async () => {
       const invalidLastNames = [
         {
-          lastName: 'This lastName is too long to be considered a lastname',
           statusCode: 400,
+          lastName: 'This lastName is too long to be considered a lastname',
           message: 'lastName must be shorter than or equal to 24 characters',
         },
         {
-          lastName: '',
           statusCode: 400,
+          lastName: '',
           message: 'lastName should not be empty',
         },
         {
-          lastName: ',0[];{}:!@#$%^&*()',
           statusCode: 400,
+          lastName: ',0[];{}:!@#$%^&*()',
           message: 'lastName must contain only letters (a-zA-Z)',
         },
         {
+          statusCode: 400,
           lastName: 10,
-          statusCode: 400,
           message: 'lastName must be a string',
         },
         {
+          statusCode: 400,
           lastName: ['foo'],
-          statusCode: 400,
           message: 'lastName must be a string',
         },
         {
-          lastName: { 0: 'foo' },
           statusCode: 400,
+          lastName: { 0: 'foo' },
           message: 'lastName must be a string',
         },
       ];
@@ -661,33 +662,33 @@ describe('Update', () => {
     it('invalid english levels', async () => {
       const invalidEnglishLevels = [
         {
-          english: 0,
           statusCode: 400,
+          english: 0,
           message: 'english must not be less than 1',
         },
         {
-          english: 6,
           statusCode: 400,
+          english: 6,
           message: 'english must not be greater than 5',
         },
         {
+          statusCode: 400,
           english: 3.5,
-          statusCode: 400,
           message: 'english must be an integer number',
         },
         {
+          statusCode: 400,
           english: '3.5',
-          statusCode: 400,
           message: 'english must be an integer number',
         },
         {
+          statusCode: 400,
           english: '3',
-          statusCode: 400,
           message: 'english must be an integer number',
         },
         {
-          english: [3],
           statusCode: 400,
+          english: [3],
           message: 'english must be an integer number',
         },
       ];
@@ -710,28 +711,28 @@ describe('Update', () => {
     it('invalid abouts', async () => {
       const invalidAbouts = [
         {
-          about: 'invalid'.repeat(1000),
           statusCode: 400,
+          about: 'invalid'.repeat(1000),
           message: 'about must be shorter than or equal to 2048 characters',
         },
         {
-          about: '',
           statusCode: 400,
+          about: '',
           message: 'about should not be empty',
         },
         {
+          statusCode: 400,
           about: 0,
-          statusCode: 400,
           message: 'about must be a string',
         },
         {
+          statusCode: 400,
           about: [],
-          statusCode: 400,
           message: 'about must be a string',
         },
         {
-          about: {},
           statusCode: 400,
+          about: {},
           message: 'about must be a string',
         },
       ];
@@ -754,43 +755,43 @@ describe('Update', () => {
     it('invalid emails', async () => {
       const invalidEmails = [
         {
-          email: '',
           statusCode: 400,
+          email: '',
           message: 'email should not be empty',
         },
         {
+          statusCode: 400,
           email: 'email',
-          statusCode: 400,
           message: 'email must be an email',
         },
         {
+          statusCode: 400,
           email: 'email@',
-          statusCode: 400,
           message: 'email must be an email',
         },
         {
+          statusCode: 400,
           email: '@email',
-          statusCode: 400,
           message: 'email must be an email',
         },
         {
+          statusCode: 400,
           email: '.com',
-          statusCode: 400,
           message: 'email must be an email',
         },
         {
+          statusCode: 400,
           email: 'email@email',
-          statusCode: 400,
           message: 'email must be an email',
         },
         {
+          statusCode: 400,
           email: '0',
-          statusCode: 400,
           message: 'email must be an email',
         },
         {
-          email: 0,
           statusCode: 400,
+          email: 0,
           message: 'email must be an email',
         },
       ];
@@ -820,6 +821,85 @@ describe('Update', () => {
 
       expect(status).toBe(400);
       validateErrorResponse({ errorResponse });
+    });
+  });
+});
+
+describe.only('Delete', () => {
+  let app: INestApplication;
+  let accessToken: string;
+  let dummyProfessional;
+
+  beforeAll(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile();
+
+    app = moduleFixture.createNestApplication();
+    app.useGlobalPipes(new ValidationPipe({ transform: true }));
+    await app.init();
+
+    accessToken = await signIn(app);
+
+    const { body: testProfessional } = await createProfessional({
+      app,
+      accessToken,
+      professional: mockProfessional,
+    });
+
+    dummyProfessional = testProfessional;
+  });
+
+  describe('professional', () => {
+    describe('should success with', () => {
+      it('valid professional Id', async () => {
+        const { status } = await deleteProfessional({
+          app,
+          accessToken,
+          id: dummyProfessional.id,
+        });
+
+        expect(status).toBe(204);
+      });
+    });
+
+    describe('should fail with', () => {
+      it('invalid professional Ids', async () => {
+        const invalidProfessionalIds = [
+          {
+            statusCode: 400,
+            id: '0',
+          },
+          {
+            statusCode: 400,
+            id: 'invalidId',
+          },
+          {
+            statusCode: 400,
+            id: 'largeId'.repeat(100),
+          },
+          {
+            statusCode: 400,
+            id: {},
+          },
+          {
+            statusCode: 400,
+            id: 0,
+          },
+        ];
+
+        for (const invalidProfessionalId of invalidProfessionalIds) {
+          const { statusCode, id } = invalidProfessionalId;
+
+          const { status } = await deleteProfessional({
+            app,
+            accessToken,
+            id,
+          });
+
+          expect(status).toBe(statusCode);
+        }
+      });
     });
   });
 });
