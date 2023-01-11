@@ -1,5 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { ProjectEntity, AttributeEntity } from '.';
+import { AttributeEntity } from './attribute.entity';
+import { ProjectEntity } from './project.entity';
 
 @Entity({ name: 'project_attributes' })
 export class ProjectAttributesEntity {

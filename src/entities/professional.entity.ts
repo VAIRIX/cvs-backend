@@ -1,12 +1,11 @@
 import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 import { BaseEntity } from './base.entity';
-import {
-  ProfessionalsProjectsEntity,
-  TechnologyEntity,
-  MethodologyEntity,
-  ProfessionalAttributesEntity,
-} from './';
+
 import { ENTITIES_VALIDATIONS } from 'src/constants/entities.constants';
+import { ProfessionalsProjectsEntity } from './professionals-projects.entity';
+import { TechnologyEntity } from './technology.entity';
+import { MethodologyEntity } from './methodology.entity';
+import { ProfessionalAttributesEntity } from './professional-attributes.entity';
 
 @Entity({ name: 'professionals' })
 export class ProfessionalEntity extends BaseEntity {

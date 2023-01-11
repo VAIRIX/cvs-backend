@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
-import { AttributeResDto } from '.';
+import { AttributeResDto } from './attribute-res.dto';
 
 export class BaseAttributeRelationResDto {
   @ApiProperty({ type: AttributeResDto })

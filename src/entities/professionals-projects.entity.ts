@@ -1,6 +1,7 @@
 import { ENTITIES_VALIDATIONS } from 'src/constants/entities.constants';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { ProfessionalEntity, ProjectEntity } from './';
+import { ProfessionalEntity } from './professional.entity';
+import { ProjectEntity } from './project.entity';
 
 @Entity({ name: 'professionals_projects' })
 export class ProfessionalsProjectsEntity {
